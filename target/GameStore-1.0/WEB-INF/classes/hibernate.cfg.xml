@@ -9,7 +9,7 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password"></property>
         <property name="hibernate.current_session_context_class">thread</property>
-        <property name="hibernate.id.new_generator_mappings">false</property>
+        <property name="hibernate.id.new_generator_mappings">true</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
         <property name="hbm2ddl.auto">update</property>

@@ -129,4 +129,12 @@ public class UserService {
             throw new IllegalArgumentException("Password cannot be null or empty");
         }
     }
+
+    public boolean isUsernameExist(String username) {
+        return getUserByUsername(username).isPresent();
+    }
+
+    public boolean isEmailExist(String email) {
+        return getUserByEmail(email).isPresent();
+    }
 }
