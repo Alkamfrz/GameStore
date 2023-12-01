@@ -1,7 +1,8 @@
-D:\Practice\Java Practice\GameStore\src\main\java\com\dethrone\gamestore\service\UserService.java
-D:\Practice\Java Practice\GameStore\src\main\java\com\dethrone\gamestore\Controller\RegisterServlet.java
-D:\Practice\Java Practice\GameStore\src\main\java\com\dethrone\gamestore\model\User.java
-D:\Practice\Java Practice\GameStore\src\main\java\com\dethrone\gamestore\resources\JakartaEE10Resource.java
-D:\Practice\Java Practice\GameStore\src\main\java\com\dethrone\gamestore\Controller\LoginServlet.java
-D:\Practice\Java Practice\GameStore\src\main\java\com\dethrone\gamestore\HibernateUtil.java
-D:\Practice\Java Practice\GameStore\src\main\java\com\dethrone\gamestore\JakartaRestConfiguration.java
+D:\Practice\OOP\GameStore\src\main\java\com\dethrone\gamestore\HibernateUtil.java
+D:\Practice\OOP\GameStore\src\main\java\com\dethrone\gamestore\model\User.java
+D:\Practice\OOP\GameStore\src\main\java\com\dethrone\gamestore\Controller\LoginServlet.java
+D:\Practice\OOP\GameStore\src\main\java\com\dethrone\gamestore\JakartaRestConfiguration.java
+D:\Practice\OOP\GameStore\src\main\java\com\dethrone\gamestore\resources\JakartaEE10Resource.java
+D:\Practice\OOP\GameStore\src\main\java\com\dethrone\gamestore\service\UserService.java
+D:\Practice\OOP\GameStore\src\main\java\com\dethrone\gamestore\Controller\RegisterServlet.java
+D:\Practice\OOP\GameStore\src\main\java\com\dethrone\gamestore\service\SecurityService.java

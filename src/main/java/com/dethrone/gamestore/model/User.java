@@ -8,11 +8,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.io.Serializable;
-import java.security.SecureRandom;
-import java.util.Base64;
-
-import org.bouncycastle.crypto.generators.Argon2BytesGenerator;
-import org.bouncycastle.crypto.params.Argon2Parameters;
 
 /**
  *
@@ -77,51 +72,5 @@ public class User implements Serializable {
 
     public boolean isCustomer() {
         return role == Role.CUSTOMER;
-    }
-
-    public void hashPassword(String password) {
-        this.salt = generateSalt();
-        Argon2Parameters.Builder builder = new Argon2Parameters.Builder(Argon2Parameters.ARGON2_id)
-                .withVersion(Argon2Parameters.ARGON2_VERSION_13)
-                .withIterations(10)
-                .withMemoryPowOfTwo(16)
-                .withParallelism(1)
-                .withSalt(salt.getBytes());
-
-        Argon2BytesGenerator gen = new Argon2BytesGenerator();
-        gen.init(builder.build());
-
-        byte[] result = new byte[32];
-        gen.generateBytes(password.toCharArray(), result);
-
-        this.password = new String(result);
-    }
-
-    public void changePassword(String newPassword) {
-        hashPassword(newPassword);
-    }
-
-    public String generateSalt() {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        return Base64.getEncoder().encodeToString(salt);
-    }
-
-    public boolean checkPassword(String password) {
-        Argon2Parameters.Builder builder = new Argon2Parameters.Builder(Argon2Parameters.ARGON2_id)
-                .withVersion(Argon2Parameters.ARGON2_VERSION_13)
-                .withIterations(10)
-                .withMemoryPowOfTwo(16)
-                .withParallelism(1)
-                .withSalt(salt.getBytes());
-
-        Argon2BytesGenerator gen = new Argon2BytesGenerator();
-        gen.init(builder.build());
-
-        byte[] result = new byte[32];
-        gen.generateBytes(password.toCharArray(), result);
-
-        return this.password.equals(new String(result));
     }
 }

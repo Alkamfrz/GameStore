@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.dethrone</groupId>
     <artifactId>GameStore</artifactId>
-    <version>1.0</version>
+    <version>1.5</version>
     <packaging>war</packaging>
-    <name>GameStore-1.0</name>
+    <name>GameStore</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

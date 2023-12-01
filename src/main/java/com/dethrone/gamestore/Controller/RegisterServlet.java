@@ -5,9 +5,12 @@
 package com.dethrone.gamestore.Controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.dethrone.gamestore.model.User;
+import com.dethrone.gamestore.service.SecurityService;
 import com.dethrone.gamestore.service.UserService;
 
 import jakarta.servlet.RequestDispatcher;
@@ -23,7 +26,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "RegisterServlet", urlPatterns = { "/register" })
 public class RegisterServlet extends HttpServlet {
-    
+
     private static final String USERNAME = "username";
     private static final String FIRST_NAME = "firstName";
     private static final String LAST_NAME = "lastName";
@@ -33,7 +36,8 @@ public class RegisterServlet extends HttpServlet {
     private static final String REGISTER_VIEW = "/WEB-INF/views/register.jsp";
     private static final String LOGIN_REDIRECT = "/login";
 
-    private UserService userService = new UserService();
+    SecurityService securityService = new SecurityService();
+    UserService userService = new UserService(securityService);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -82,10 +86,10 @@ public class RegisterServlet extends HttpServlet {
         String password = Optional.ofNullable(request.getParameter(PASSWORD)).orElse("");
         String email = Optional.ofNullable(request.getParameter(EMAIL)).orElse("");
 
-        StringBuilder errorMessage = validateFormData(username, firstName, lastName, password, email);
+        List<String> errorMessage = validateFormData(username, firstName, lastName, password, email);
 
-        if (errorMessage != null && errorMessage.length() > 0) {
-            request.setAttribute(ERROR_MESSAGE, errorMessage.toString());
+        if (errorMessage != null && !errorMessage.isEmpty()) {
+            request.setAttribute(ERROR_MESSAGE, errorMessage);
             RequestDispatcher dispatcher = request.getRequestDispatcher(REGISTER_VIEW);
             dispatcher.forward(request, response);
         } else {
@@ -103,31 +107,32 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-    private StringBuilder validateFormData(String username, String firstName, String lastName, String password, String email) {
-        StringBuilder errorMessage = null;
-        if (username.isEmpty() || userService.isUsernameExist(username) || firstName.isEmpty() || lastName.isEmpty() || password.isEmpty() || email.isEmpty() || userService.isEmailExist(email)) {
-            errorMessage = new StringBuilder();
+    private List<String> validateFormData(String username, String firstName, String lastName, String password,
+            String email) {
+        List<String> errorMessages = new ArrayList<>();
+        if (username.isEmpty() || userService.isUsernameExist(username) || firstName.isEmpty() || lastName.isEmpty()
+                || password.isEmpty() || email.isEmpty() || userService.isEmailExist(email)) {
             if (username.isEmpty()) {
-                errorMessage.append("Username is required. ");
+                errorMessages.add("Username is required.");
             } else if (userService.isUsernameExist(username)) {
-                errorMessage.append("Username is already taken. ");
+                errorMessages.add("Username is already taken.");
             }
             if (firstName.isEmpty()) {
-                errorMessage.append("First name is required. ");
+                errorMessages.add("First name is required.");
             }
             if (lastName.isEmpty()) {
-                errorMessage.append("Last name is required. ");
+                errorMessages.add("Last name is required.");
             }
             if (password.isEmpty()) {
-                errorMessage.append("Password is required. ");
+                errorMessages.add("Password is required.");
             }
             if (email.isEmpty()) {
-                errorMessage.append("Email is required. ");
+                errorMessages.add("Email is required.");
             } else if (userService.isEmailExist(email)) {
-                errorMessage.append("Email is already in use. ");
+                errorMessages.add("Email is already in use.");
             }
         }
-        return errorMessage;
+        return errorMessages;
     }
 
     /**

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import com.dethrone.gamestore.model.User;
+import com.dethrone.gamestore.service.SecurityService;
 import com.dethrone.gamestore.service.UserService;
 
 import jakarta.servlet.ServletException;
@@ -23,7 +24,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "LoginServlet", urlPatterns = { "/login" })
 public class LoginServlet extends HttpServlet {
 
-    private UserService userService = new UserService();
+    SecurityService securityService = new SecurityService();
+    UserService userService = new UserService(securityService);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -94,7 +96,7 @@ public class LoginServlet extends HttpServlet {
 
     private void handleInvalidLogin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("error", "Invalid username or password");
+        request.setAttribute("errorMessage", "Invalid username or password");
         request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
     }
 
