@@ -32,6 +32,7 @@ uri="jakarta.tags.functions" %>
               </ul>
             </div>
           </div>
+          <% session.removeAttribute("errorMessage"); %>
         </c:if>
         <div
           id="error"
@@ -174,6 +175,6 @@ uri="jakarta.tags.functions" %>
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="js/register.js"></script>
+    <script src="assets/js/register.js"></script>
   </body>
 </html>

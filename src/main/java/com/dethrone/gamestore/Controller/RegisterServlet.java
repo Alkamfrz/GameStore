@@ -6,8 +6,10 @@ package com.dethrone.gamestore.Controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.dethrone.gamestore.model.User;
 import com.dethrone.gamestore.service.SecurityService;
@@ -33,6 +35,7 @@ public class RegisterServlet extends HttpServlet {
     private static final String PASSWORD = "password";
     private static final String EMAIL = "email";
     private static final String ERROR_MESSAGE = "errorMessage";
+    private static final String SUCCESS_MESSAGE = "successMessage";
     private static final String REGISTER_VIEW = "/WEB-INF/views/register.jsp";
     private static final String LOGIN_REDIRECT = "/login";
 
@@ -86,6 +89,13 @@ public class RegisterServlet extends HttpServlet {
         String password = Optional.ofNullable(request.getParameter(PASSWORD)).orElse("");
         String email = Optional.ofNullable(request.getParameter(EMAIL)).orElse("");
 
+        firstName = Arrays.stream(firstName.split(" "))
+                .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                .collect(Collectors.joining(" "));
+        lastName = Arrays.stream(lastName.split(" "))
+                .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                .collect(Collectors.joining(" "));
+
         List<String> errorMessage = validateFormData(username, firstName, lastName, password, email);
 
         if (errorMessage != null && !errorMessage.isEmpty()) {
@@ -102,7 +112,7 @@ public class RegisterServlet extends HttpServlet {
             user.setRole(User.Role.CUSTOMER);
 
             userService.registerUser(user);
-
+            request.getSession().setAttribute(SUCCESS_MESSAGE, "You have been successfully registered.");
             response.sendRedirect(request.getContextPath() + LOGIN_REDIRECT);
         }
     }

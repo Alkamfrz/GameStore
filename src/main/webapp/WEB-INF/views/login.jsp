@@ -8,13 +8,14 @@ uri="jakarta.tags.core" %> <%@ taglib prefix="fn" uri="jakarta.tags.functions"
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <title>Login</title>
   </head>
   <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="container mx-auto py-8">
       <h1 class="text-2xl font-bold mb-6 text-center">Login Form</h1>
       <form
+      id="login-form"
         class="w-full max-w-md mx-auto bg-white p-8 rounded-md shadow-md"
         action="login"
         method="post"
@@ -32,6 +33,18 @@ uri="jakarta.tags.core" %> <%@ taglib prefix="fn" uri="jakarta.tags.functions"
               </ul>
             </div>
           </div>
+          <% session.removeAttribute("errorMessage"); %>
+        </c:if>
+        <c:if test="${not empty successMessage}">
+          <div id="success-messages">
+            <div
+              class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
+              role="alert"
+            >
+              <span>${successMessage}</span>
+            </div>
+          </div>
+          <% session.removeAttribute("successMessage"); %>
         </c:if>
         <div
           id="error"
@@ -100,6 +113,6 @@ uri="jakarta.tags.core" %> <%@ taglib prefix="fn" uri="jakarta.tags.functions"
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="js/login.js"></script>
+    <script src="assets/js/login.js"></script>
   </body>
 </html>
