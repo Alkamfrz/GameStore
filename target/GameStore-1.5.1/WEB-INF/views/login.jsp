@@ -17,7 +17,7 @@ uri="jakarta.tags.core" %> <%@ taglib prefix="fn" uri="jakarta.tags.functions"
       <form
       id="login-form"
         class="w-full max-w-md mx-auto bg-white p-8 rounded-md shadow-md"
-        action="login"
+        action="/GameStore/login"
         method="post"
       >
         <c:if test="${not empty errorMessage}">
@@ -99,7 +99,7 @@ uri="jakarta.tags.core" %> <%@ taglib prefix="fn" uri="jakarta.tags.functions"
       </form>
       <p class="text-center mt-4">
         Don't have an account?
-        <a href="register" class="text-blue-500">Register</a>
+        <a href="/GameStore/register" class="text-blue-500">Register</a>
       </p>
     </div>
     <script
@@ -113,6 +113,6 @@ uri="jakarta.tags.core" %> <%@ taglib prefix="fn" uri="jakarta.tags.functions"
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="assets/js/login.js"></script>
+    <script src="/GameStore/assets/js/login.js"></script>
   </body>
 </html>

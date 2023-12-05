@@ -2,9 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.dethrone.gamestore.Controller;
+package com.dethrone.gamestore.controller;
 
 import java.io.IOException;
+import java.util.List;
+
+import com.dethrone.gamestore.model.User;
+import com.dethrone.gamestore.service.SecurityService;
+import com.dethrone.gamestore.service.UserService;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,7 +22,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author alkam
  */
-@WebServlet(name = "DashboardServlet", urlPatterns = { "/dashboard" })
+@WebServlet(name = "DashboardServlet", urlPatterns = { "/admin/dashboard" })
 public class DashboardServlet extends HttpServlet {
 
     /**
@@ -30,13 +36,24 @@ public class DashboardServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                    HttpSession session = request.getSession(false);
-                if(session == null || session.getAttribute("user") == null) {
-                    response.sendRedirect(request.getContextPath() + "/login");
-                } else {
-                    request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
-                }
-            }
+        HttpSession session = request.getSession(false);
+        if(session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+        } else {
+            UserService userService = new UserService(new SecurityService());
+            List<User> users = userService.getAllUsers();
+            users.sort((User u1, User u2) -> u2.getCreatedAt().compareTo(u1.getCreatedAt()));
+            request.setAttribute("users", users);
+
+            // New code
+            int totalUsers = userService.getTotalUsers();
+            int newUsersThisMonth = userService.getNewUsersThisMonth();
+            request.setAttribute("totalUsers", totalUsers);
+            request.setAttribute("newUsersThisMonth", newUsersThisMonth);
+
+            request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
     // + sign on the left to edit the code.">

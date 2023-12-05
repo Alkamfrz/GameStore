@@ -16,7 +16,7 @@ uri="jakarta.tags.functions" %>
       <h1 class="text-2xl font-bold mb-6 text-center">Registration Form</h1>
       <form
         class="w-full max-w-lg mx-auto bg-white p-8 rounded-md shadow-md"
-        action="register"
+        action="/GameStore/register"
         method="post"
       >
         <c:if test="${not empty errorMessage}">
@@ -161,7 +161,7 @@ uri="jakarta.tags.functions" %>
       </form>
       <p class="text-center mt-4">
         Already have an account?
-        <a href="login" class="text-blue-500">Login</a>
+        <a href="/GameStore/login" class="text-blue-500">Login</a>
       </p>
     </div>
     <script
@@ -175,6 +175,6 @@ uri="jakarta.tags.functions" %>
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="assets/js/register.js"></script>
+    <script src="/GameStore/assets/js/register.js"></script>
   </body>
 </html>

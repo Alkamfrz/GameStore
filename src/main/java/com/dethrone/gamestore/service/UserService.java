@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -60,6 +61,8 @@ public class UserService {
             user.setPassword(hashedPassword);
             user.setSalt(salt);
         }
+        user.setRole(User.Role.CUSTOMER);
+        user.setCreatedAt(LocalDateTime.now());
         executeInTransaction(session -> session.persist(user));
         return user;
     }
@@ -111,7 +114,19 @@ public class UserService {
         return executeQuery(session -> session.createQuery("from User", User.class).list());
     }
 
+    public int getTotalUsers() {
+        return executeQuery(session -> session.createQuery("select count(*) from User", Long.class).uniqueResult().intValue());
+    }
+
+    public int getNewUsersThisMonth() {
+        LocalDateTime firstDayOfMonth = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        return executeQuery(session -> session.createQuery("select count(*) from User where createdAt >= :firstDayOfMonth", Long.class)
+                .setParameter("firstDayOfMonth", firstDayOfMonth)
+                .uniqueResult().intValue());
+    }
+
     public void updateUser(User user) {
+        user.setUpdatedAt(LocalDateTime.now());
         executeInTransaction(session -> session.merge(user));
     }
 

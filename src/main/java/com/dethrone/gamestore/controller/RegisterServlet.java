@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.dethrone.gamestore.Controller;
+package com.dethrone.gamestore.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -109,7 +109,6 @@ public class RegisterServlet extends HttpServlet {
             user.setEmail(email);
             user.setFirstName(firstName);
             user.setLastName(lastName);
-            user.setRole(User.Role.CUSTOMER);
 
             userService.registerUser(user);
             request.getSession().setAttribute(SUCCESS_MESSAGE, "You have been successfully registered.");

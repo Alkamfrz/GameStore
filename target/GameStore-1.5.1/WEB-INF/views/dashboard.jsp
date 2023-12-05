@@ -39,7 +39,7 @@ uri="jakarta.tags.functions" %>
               alt="Logo"
               class="w-28 h-18 mr-2"
             />
-            <h2 class="font-bold text-xl">Nombre de la Aplicación</h2>
+            <h2 class="font-bold text-xl">Dashboard</h2>
           </div>
           <div class="md:hidden flex items-center">
             <button id="menuBtn">
@@ -98,7 +98,7 @@ uri="jakarta.tags.functions" %>
 
           <a
             class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white mt-auto"
-            href="logout"
+            href="/GameStore/logout"
           >
             <i class="fas fa-sign-out-alt mr-2"></i>Logout
           </a>
@@ -124,7 +124,9 @@ uri="jakarta.tags.functions" %>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 p-2">
             <div class="bg-white p-4 rounded-md">
-              <h2 class="text-gray-500 text-lg font-semibold pb-1">Usuarios</h2>
+              <h2 class="text-gray-500 text-lg font-semibold pb-1">
+                Total Users
+              </h2>
               <div class="my1-"></div>
               <div
                 class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"
@@ -132,6 +134,8 @@ uri="jakarta.tags.functions" %>
               <div
                 class="chart-container"
                 style="position: relative; height: 150px; width: 100%"
+                data-total-users="${totalUsers}"
+                data-new-users="${newUsersThisMonth}"
               >
                 <canvas id="usersChart"></canvas>
               </div>
@@ -154,7 +158,7 @@ uri="jakarta.tags.functions" %>
             </div>
 
             <div class="bg-white p-4 rounded-md">
-              <h2 class="text-gray-500 text-lg font-semibold pb-4">Users</h2>
+              <h2 class="text-gray-500 text-lg font-semibold pb-4">Latest Users</h2>
               <div class="my-1"></div>
               <div
                 class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"
@@ -165,111 +169,36 @@ uri="jakarta.tags.functions" %>
                     <th
                       class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light"
                     >
-                      Foto
+                      Name
                     </th>
                     <th
                       class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light"
                     >
-                      Nombre
-                    </th>
-                    <th
-                      class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light"
-                    >
-                      Rol
+                      Role
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="hover:bg-grey-lighter">
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      <img
-                        src="https://via.placeholder.com/40"
-                        alt="Foto Perfil"
-                        class="rounded-full h-10 w-10"
-                      />
-                    </td>
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      Juan Pérez
-                    </td>
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      Comercio
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-grey-lighter">
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      <img
-                        src="https://via.placeholder.com/40"
-                        alt="Foto Perfil"
-                        class="rounded-full h-10 w-10"
-                      />
-                    </td>
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      María Gómez
-                    </td>
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      Usuario
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-grey-lighter">
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      <img
-                        src="https://via.placeholder.com/40"
-                        alt="Foto Perfil"
-                        class="rounded-full h-10 w-10"
-                      />
-                    </td>
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      Carlos López
-                    </td>
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      Usuario
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-grey-lighter">
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      <img
-                        src="https://via.placeholder.com/40"
-                        alt="Foto Perfil"
-                        class="rounded-full h-10 w-10"
-                      />
-                    </td>
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      Laura Torres
-                    </td>
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      Comercio
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-grey-lighter">
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      <img
-                        src="https://via.placeholder.com/40"
-                        alt="Foto Perfil"
-                        class="rounded-full h-10 w-10"
-                      />
-                    </td>
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      Ana Ramírez
-                    </td>
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      Usuario
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-grey-lighter">
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      <img
-                        src="https://via.placeholder.com/40"
-                        alt="Foto Perfil"
-                        class="rounded-full h-10 w-10"
-                      />
-                    </td>
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      Luis Martínez
-                    </td>
-                    <td class="py-2 px-4 border-b border-grey-light">
-                      Comercio
-                    </td>
-                  </tr>
+                  <c:forEach var="user" items="${users}" varStatus="status">
+                    <c:if test="${status.index < 10}">
+                      <tr class="hover:bg-grey-lighter">
+                        <td class="py-2 px-4 border-b border-grey-light">
+                          ${user.firstName} ${user.lastName}
+                        </td>
+                        <td class="py-2 px-4 border-b border-grey-light">
+                          <c:set
+                            var="role"
+                            value="${user.role.name().toLowerCase().split('_')}"
+                          />
+                          <c:forEach var="word" items="${role}">
+                            ${fn:substring(word, 0,
+                            1).toUpperCase()}${fn:substring(word, 1,
+                            fn:length(word))}
+                          </c:forEach>
+                        </td>
+                      </tr>
+                    </c:if>
+                  </c:forEach>
                 </tbody>
               </table>
               <div class="text-right mt-4">
@@ -434,6 +363,6 @@ uri="jakarta.tags.functions" %>
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="assets/js/dashboard.js"></script>
+    <script src="/GameStore/assets/js/dashboard.js"></script>
   </body>
 </html>

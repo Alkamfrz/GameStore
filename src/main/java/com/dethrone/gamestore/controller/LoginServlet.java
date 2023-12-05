@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.dethrone.gamestore.Controller;
+package com.dethrone.gamestore.controller;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -86,7 +86,7 @@ public class LoginServlet extends HttpServlet {
         String role = user.getRole().name().toLowerCase();
 
         if ("admin".equals(role)) {
-            response.sendRedirect(request.getContextPath() + "/dashboard");
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
         } else if ("customer".equals(role)) {
             response.sendRedirect(request.getContextPath() + "/store");
         } else {

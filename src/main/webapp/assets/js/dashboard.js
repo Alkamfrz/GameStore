@@ -1,9 +1,12 @@
+var totalUsers = $('.chart-container').data('total-users');
+var newUsersThisMonth = $('.chart-container').data('new-users');
+
 var usersChart = new Chart($('#usersChart'), {
     type: 'doughnut',
     data: {
-        labels: ['Nuevos', 'Registrados'],
+        labels: ['New (This Month)', 'Registered'],
         datasets: [{
-            data: [30, 65],
+            data: [newUsersThisMonth, totalUsers],
             backgroundColor: ['#00F0FF', '#8B8B8D'],
         }]
     },

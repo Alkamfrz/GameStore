@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -65,6 +66,14 @@ public class User implements Serializable {
 
     @Column(name = "salt")
     private String salt;
+
+    @NonNull
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Null
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     public boolean isAdmin() {
         return role == Role.ADMIN;
