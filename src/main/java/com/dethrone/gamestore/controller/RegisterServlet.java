@@ -21,6 +21,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -38,6 +40,7 @@ public class RegisterServlet extends HttpServlet {
     private static final String SUCCESS_MESSAGE = "successMessage";
     private static final String REGISTER_VIEW = "/WEB-INF/views/register.jsp";
     private static final String LOGIN_REDIRECT = "/login";
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegisterServlet.class);
 
     SecurityService securityService = new SecurityService();
     UserService userService = new UserService(securityService);
@@ -83,36 +86,40 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = Optional.ofNullable(request.getParameter(USERNAME)).orElse("");
-        String firstName = Optional.ofNullable(request.getParameter(FIRST_NAME)).orElse("");
-        String lastName = Optional.ofNullable(request.getParameter(LAST_NAME)).orElse("");
-        String password = Optional.ofNullable(request.getParameter(PASSWORD)).orElse("");
-        String email = Optional.ofNullable(request.getParameter(EMAIL)).orElse("");
+        try {
+            String username = Optional.ofNullable(request.getParameter(USERNAME)).orElse("");
+            String firstName = Optional.ofNullable(request.getParameter(FIRST_NAME)).orElse("");
+            String lastName = Optional.ofNullable(request.getParameter(LAST_NAME)).orElse("");
+            String password = Optional.ofNullable(request.getParameter(PASSWORD)).orElse("");
+            String email = Optional.ofNullable(request.getParameter(EMAIL)).orElse("");
 
-        firstName = Arrays.stream(firstName.split(" "))
-                .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
-                .collect(Collectors.joining(" "));
-        lastName = Arrays.stream(lastName.split(" "))
-                .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
-                .collect(Collectors.joining(" "));
+            firstName = Arrays.stream(firstName.split(" "))
+                    .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                    .collect(Collectors.joining(" "));
+            lastName = Arrays.stream(lastName.split(" "))
+                    .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                    .collect(Collectors.joining(" "));
 
-        List<String> errorMessage = validateFormData(username, firstName, lastName, password, email);
+            List<String> errorMessage = validateFormData(username, firstName, lastName, password, email);
 
-        if (errorMessage != null && !errorMessage.isEmpty()) {
-            request.setAttribute(ERROR_MESSAGE, errorMessage);
-            RequestDispatcher dispatcher = request.getRequestDispatcher(REGISTER_VIEW);
-            dispatcher.forward(request, response);
-        } else {
-            User user = new User();
-            user.setUsername(username);
-            user.setPassword(password);
-            user.setEmail(email);
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
+            if (errorMessage != null && !errorMessage.isEmpty()) {
+                request.setAttribute(ERROR_MESSAGE, errorMessage);
+                RequestDispatcher dispatcher = request.getRequestDispatcher(REGISTER_VIEW);
+                dispatcher.forward(request, response);
+            } else {
+                User user = new User();
+                user.setUsername(username);
+                user.setPassword(password);
+                user.setEmail(email);
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
 
-            userService.registerUser(user);
-            request.getSession().setAttribute(SUCCESS_MESSAGE, "You have been successfully registered.");
-            response.sendRedirect(request.getContextPath() + LOGIN_REDIRECT);
+                userService.registerUser(user);
+                request.getSession().setAttribute(SUCCESS_MESSAGE, "You have been successfully registered.");
+                response.sendRedirect(request.getContextPath() + LOGIN_REDIRECT);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error processing POST request", e);
         }
     }
 

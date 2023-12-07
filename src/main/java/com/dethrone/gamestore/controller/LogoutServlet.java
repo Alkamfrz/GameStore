@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -19,6 +21,7 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet(name = "LogoutServlet", urlPatterns = { "/logout" })
 public class LogoutServlet extends HttpServlet {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogoutServlet.class);
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,12 +45,16 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
+        try {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+            request.getSession().setAttribute("successMessage", "You have been successfully logged out.");
+            response.sendRedirect("login");
+        } catch (Exception e) {
+            LOGGER.error("Error processing GET request", e);
         }
-        request.getSession().setAttribute("successMessage", "You have been successfully logged out.");
-        response.sendRedirect("login");
     }
 
     /**

@@ -115,12 +115,15 @@ public class UserService {
     }
 
     public int getTotalUsers() {
-        return executeQuery(session -> session.createQuery("select count(*) from User", Long.class).uniqueResult().intValue());
+        return executeQuery(
+                session -> session.createQuery("select count(*) from User", Long.class).uniqueResult().intValue());
     }
 
     public int getNewUsersThisMonth() {
-        LocalDateTime firstDayOfMonth = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
-        return executeQuery(session -> session.createQuery("select count(*) from User where createdAt >= :firstDayOfMonth", Long.class)
+        LocalDateTime firstDayOfMonth = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0)
+                .withNano(0);
+        return executeQuery(session -> session
+                .createQuery("select count(*) from User where createdAt >= :firstDayOfMonth", Long.class)
                 .setParameter("firstDayOfMonth", firstDayOfMonth)
                 .uniqueResult().intValue());
     }

@@ -15,7 +15,7 @@ uri="jakarta.tags.core" %> <%@ taglib prefix="fn" uri="jakarta.tags.functions"
     <div class="container mx-auto py-8">
       <h1 class="text-2xl font-bold mb-6 text-center">Login Form</h1>
       <form
-      id="login-form"
+        id="login-form"
         class="w-full max-w-md mx-auto bg-white p-8 rounded-md shadow-md"
         action="/GameStore/login"
         method="post"

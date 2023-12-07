@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.dethrone</groupId>
     <artifactId>GameStore</artifactId>
-    <version>1.5.2</version>
+    <version>1.5.3</version>
     <packaging>war</packaging>
     <name>GameStore</name>
 
@@ -56,6 +56,11 @@
             <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-hikaricp</artifactId>
+            <version>6.4.0.Final</version>
+        </dependency>        
     </dependencies>
 
     <build>

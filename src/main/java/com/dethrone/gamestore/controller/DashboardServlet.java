@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -24,6 +26,20 @@ import jakarta.servlet.http.HttpSession;
  */
 @WebServlet(name = "DashboardServlet", urlPatterns = { "/admin/dashboard" })
 public class DashboardServlet extends HttpServlet {
+
+    private static final String LOGIN_URL = "/login";
+    private static final String USERNAME_ATTRIBUTE = "username";
+    private static final String USERS_ATTRIBUTE = "users";
+    private static final String TOTAL_USERS_ATTRIBUTE = "totalUsers";
+    private static final String NEW_USERS_THIS_MONTH_ATTRIBUTE = "newUsersThisMonth";
+    private static final Logger LOGGER = LoggerFactory.getLogger(DashboardServlet.class);
+
+    private UserService userService;
+
+    public DashboardServlet() {
+        SecurityService securityService = new SecurityService();
+        this.userService = new UserService(securityService);
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,21 +53,27 @@ public class DashboardServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if(session == null || session.getAttribute("user") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + LOGIN_URL);
         } else {
-            UserService userService = new UserService(new SecurityService());
-            List<User> users = userService.getAllUsers();
-            users.sort((User u1, User u2) -> u2.getCreatedAt().compareTo(u1.getCreatedAt()));
-            request.setAttribute("users", users);
+            try {
+                User currentUser = (User) session.getAttribute("user");
+                String username = currentUser.getUsername();
+                request.setAttribute(USERNAME_ATTRIBUTE, username);
 
-            // New code
-            int totalUsers = userService.getTotalUsers();
-            int newUsersThisMonth = userService.getNewUsersThisMonth();
-            request.setAttribute("totalUsers", totalUsers);
-            request.setAttribute("newUsersThisMonth", newUsersThisMonth);
+                List<User> users = userService.getAllUsers();
+                users.sort((User u1, User u2) -> u2.getCreatedAt().compareTo(u1.getCreatedAt()));
+                request.setAttribute(USERS_ATTRIBUTE, users);
 
-            request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+                int totalUsers = userService.getTotalUsers();
+                int newUsersThisMonth = userService.getNewUsersThisMonth();
+                request.setAttribute(TOTAL_USERS_ATTRIBUTE, totalUsers);
+                request.setAttribute(NEW_USERS_THIS_MONTH_ATTRIBUTE, newUsersThisMonth);
+
+                request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+            } catch (Exception e) {
+                LOGGER.error("Error processing request", e);
+            }
         }
     }
 

@@ -16,6 +16,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -23,6 +25,8 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "LoginServlet", urlPatterns = { "/login" })
 public class LoginServlet extends HttpServlet {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoginServlet.class);
 
     SecurityService securityService = new SecurityService();
     UserService userService = new UserService(securityService);
@@ -68,16 +72,20 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String usernameOrEmail = request.getParameter("usernameOrEmail");
-        String password = request.getParameter("password");
+        try {
+            String usernameOrEmail = request.getParameter("usernameOrEmail");
+            String password = request.getParameter("password");
 
-        Optional<User> user = userService.loginUser(usernameOrEmail, password);
+            Optional<User> user = userService.loginUser(usernameOrEmail, password);
 
-        if (user.isPresent()) {
-            request.getSession().setAttribute("user", user.get());
-            redirectToPageBasedOnRole(user.get(), request, response);
-        } else {
-            handleInvalidLogin(request, response);
+            if (user.isPresent()) {
+                request.getSession().setAttribute("user", user.get());
+                redirectToPageBasedOnRole(user.get(), request, response);
+            } else {
+                handleInvalidLogin(request, response);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error processing POST request", e);
         }
     }
 
