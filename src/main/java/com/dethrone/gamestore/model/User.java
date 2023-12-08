@@ -67,6 +67,10 @@ public class User implements Serializable {
     @Column(name = "salt")
     private String salt;
 
+    @Null
+    @Column(name = "profile_photo")
+    private String profilePhoto;
+
     @NonNull
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -75,11 +79,12 @@ public class User implements Serializable {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public boolean isAdmin() {
-        return role == Role.ADMIN;
-    }
+    @Null
+    @Column(name = "last_login")
+    private LocalDateTime lastLogin;
 
-    public boolean isCustomer() {
-        return role == Role.CUSTOMER;
+    @PreUpdate
+    public void setLastLogin() {
+        this.lastLogin = LocalDateTime.now();
     }
 }

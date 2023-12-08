@@ -1,0 +1,12 @@
+.search-input {
+    z-index: 1;
+}
+
+.dropdown-menu {
+    z-index: 2;
+}
+
+#sideNav {
+    max-width: 200px;
+    transition: max-width 0.5s ease;
+}

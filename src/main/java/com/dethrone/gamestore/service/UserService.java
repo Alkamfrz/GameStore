@@ -73,7 +73,11 @@ public class UserService {
             LOGGER.error("User not found");
             return Optional.empty();
         }
-        return user.filter(u -> securityService.checkPassword(password, u.getPassword(), u.getSalt()));
+        boolean passwordMatches = user.filter(u -> securityService.checkPassword(password, u.getPassword(), u.getSalt())).isPresent();
+        if (passwordMatches) {
+            user.get().setLastLogin();
+        }
+        return passwordMatches ? user : Optional.empty();
     }
 
     private Optional<User> getUser(String usernameOrEmail) {

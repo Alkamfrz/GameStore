@@ -32,6 +32,7 @@ public class DashboardServlet extends HttpServlet {
     private static final String USERS_ATTRIBUTE = "users";
     private static final String TOTAL_USERS_ATTRIBUTE = "totalUsers";
     private static final String NEW_USERS_THIS_MONTH_ATTRIBUTE = "newUsersThisMonth";
+    private static final String PROFILE_PHOTO_ATTRIBUTE = "profilePhoto";
     private static final Logger LOGGER = LoggerFactory.getLogger(DashboardServlet.class);
 
     private UserService userService;
@@ -59,7 +60,12 @@ public class DashboardServlet extends HttpServlet {
             try {
                 User currentUser = (User) session.getAttribute("user");
                 String username = currentUser.getUsername();
+                String profilePhoto = currentUser.getProfilePhoto();
+                int id = currentUser.getId();
+
                 request.setAttribute(USERNAME_ATTRIBUTE, username);
+                request.setAttribute(PROFILE_PHOTO_ATTRIBUTE, profilePhoto);
+                request.setAttribute("id", id);
 
                 List<User> users = userService.getAllUsers();
                 users.sort((User u1, User u2) -> u2.getCreatedAt().compareTo(u1.getCreatedAt()));
