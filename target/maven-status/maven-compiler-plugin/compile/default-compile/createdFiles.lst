@@ -1,8 +1,10 @@
 com\dethrone\gamestore\HibernateUtil.class
 com\dethrone\gamestore\HibernateUtil$SessionFactoryHolder.class
+com\dethrone\gamestore\controller\ProfileServlet.class
 com\dethrone\gamestore\service\UserService.class
 com\dethrone\gamestore\controller\DashboardServlet.class
 com\dethrone\gamestore\controller\LogoutServlet.class
+com\dethrone\gamestore\controller\AppContextListener.class
 com\dethrone\gamestore\service\UserService$CustomNonUniqueResultException.class
 com\dethrone\gamestore\service\SecurityService.class
 com\dethrone\gamestore\filter\RoleBasedAccessControlFilter.class
@@ -13,3 +15,4 @@ com\dethrone\gamestore\model\User.class
 com\dethrone\gamestore\resources\JakartaEE10Resource.class
 com\dethrone\gamestore\controller\LoginServlet.class
 com\dethrone\gamestore\controller\RegisterServlet.class
+com\dethrone\gamestore\Constants.class

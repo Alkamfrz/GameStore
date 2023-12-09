@@ -7,10 +7,11 @@ package com.dethrone.gamestore.controller;
 import java.io.IOException;
 import java.util.Optional;
 
+import com.dethrone.gamestore.Constants;
 import com.dethrone.gamestore.model.User;
-import com.dethrone.gamestore.service.SecurityService;
 import com.dethrone.gamestore.service.UserService;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -28,8 +29,14 @@ public class LoginServlet extends HttpServlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginServlet.class);
 
-    SecurityService securityService = new SecurityService();
-    UserService userService = new UserService(securityService);
+    private UserService userService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        ServletContext context = getServletContext();
+        userService = (UserService) context.getAttribute("userService");
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -73,8 +80,8 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String usernameOrEmail = request.getParameter("usernameOrEmail");
-            String password = request.getParameter("password");
+            String usernameOrEmail = request.getParameter(Constants.USERNAME_OR_EMAIL);
+            String password = request.getParameter(Constants.PASSWORD);
 
             Optional<User> user = userService.loginUser(usernameOrEmail, password);
 
@@ -85,7 +92,7 @@ public class LoginServlet extends HttpServlet {
                 handleInvalidLogin(request, response);
             }
         } catch (Exception e) {
-            LOGGER.error("Error processing POST request", e);
+            LOGGER.error(Constants.POST_REQUEST_ERROR, e);
         }
     }
 
@@ -94,9 +101,9 @@ public class LoginServlet extends HttpServlet {
         String role = user.getRole().name().toLowerCase();
 
         if ("admin".equals(role)) {
-            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            response.sendRedirect(request.getContextPath() + Constants.ADMIN_DASHBOARD);
         } else if ("customer".equals(role)) {
-            response.sendRedirect(request.getContextPath() + "/store");
+            response.sendRedirect(request.getContextPath() + Constants.STORE);
         } else {
             handleInvalidLogin(request, response);
         }
@@ -104,7 +111,7 @@ public class LoginServlet extends HttpServlet {
 
     private void handleInvalidLogin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("errorMessage", "Invalid username or password");
+        request.setAttribute(Constants.ERROR_MESSAGE, Constants.INVALID_CREDENTIALS);
         request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
     }
 
@@ -115,7 +122,7 @@ public class LoginServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "LoginServlet";
+    }
 
 }

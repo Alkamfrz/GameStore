@@ -9,6 +9,9 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 /**
  *
@@ -32,7 +35,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private int id;
+    private UUID id;
 
     @NonNull
     @Size(min = 2, max = 50)
@@ -72,6 +75,7 @@ public class User implements Serializable {
     private String profilePhoto;
 
     @NonNull
+    @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -80,11 +84,10 @@ public class User implements Serializable {
     private LocalDateTime updatedAt;
 
     @Null
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @Null
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
-
-    @PreUpdate
-    public void setLastLogin() {
-        this.lastLogin = LocalDateTime.now();
-    }
 }

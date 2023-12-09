@@ -73,11 +73,14 @@ public class UserService {
             LOGGER.error("User not found");
             return Optional.empty();
         }
-        boolean passwordMatches = user.filter(u -> securityService.checkPassword(password, u.getPassword(), u.getSalt())).isPresent();
-        if (passwordMatches) {
-            user.get().setLastLogin();
-        }
-        return passwordMatches ? user : Optional.empty();
+        return user.filter(u -> {
+            boolean passwordMatches = securityService.checkPassword(password, u.getPassword(), u.getSalt());
+            if (passwordMatches) {
+                u.setLastLogin(LocalDateTime.now());
+                executeInTransaction(session -> session.merge(u));
+            }
+            return passwordMatches;
+        });
     }
 
     private Optional<User> getUser(String usernameOrEmail) {
@@ -179,12 +182,13 @@ public class UserService {
     }
 
     public void changeUser(User user, String newUsername, String newFirstName, String newLastName, String newEmail,
-            User.Role newRole) {
+            User.Role newRole, String newProfilePhoto) {
         user.setUsername(newUsername);
         user.setFirstName(newFirstName);
         user.setLastName(newLastName);
         user.setEmail(newEmail);
         user.setRole(newRole);
+        user.setProfilePhoto(newProfilePhoto);
         updateUser(user);
     }
 

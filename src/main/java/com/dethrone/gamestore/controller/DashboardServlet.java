@@ -5,12 +5,15 @@
 package com.dethrone.gamestore.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
+import com.dethrone.gamestore.Constants;
 import com.dethrone.gamestore.model.User;
-import com.dethrone.gamestore.service.SecurityService;
 import com.dethrone.gamestore.service.UserService;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,19 +30,15 @@ import org.slf4j.LoggerFactory;
 @WebServlet(name = "DashboardServlet", urlPatterns = { "/admin/dashboard" })
 public class DashboardServlet extends HttpServlet {
 
-    private static final String LOGIN_URL = "/login";
-    private static final String USERNAME_ATTRIBUTE = "username";
-    private static final String USERS_ATTRIBUTE = "users";
-    private static final String TOTAL_USERS_ATTRIBUTE = "totalUsers";
-    private static final String NEW_USERS_THIS_MONTH_ATTRIBUTE = "newUsersThisMonth";
-    private static final String PROFILE_PHOTO_ATTRIBUTE = "profilePhoto";
     private static final Logger LOGGER = LoggerFactory.getLogger(DashboardServlet.class);
 
     private UserService userService;
 
-    public DashboardServlet() {
-        SecurityService securityService = new SecurityService();
-        this.userService = new UserService(securityService);
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        ServletContext context = getServletContext();
+        userService = (UserService) context.getAttribute("userService");
     }
 
     /**
@@ -54,33 +53,44 @@ public class DashboardServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect(request.getContextPath() + LOGIN_URL);
+        if (!isUserLoggedIn(session)) {
+            response.sendRedirect(request.getContextPath() + Constants.LOGIN_URL);
         } else {
             try {
                 User currentUser = (User) session.getAttribute("user");
-                String username = currentUser.getUsername();
-                String profilePhoto = currentUser.getProfilePhoto();
-                int id = currentUser.getId();
+                setUserAttributes(request, currentUser);
+                setDashboardData(request);
 
-                request.setAttribute(USERNAME_ATTRIBUTE, username);
-                request.setAttribute(PROFILE_PHOTO_ATTRIBUTE, profilePhoto);
-                request.setAttribute("id", id);
-
-                List<User> users = userService.getAllUsers();
-                users.sort((User u1, User u2) -> u2.getCreatedAt().compareTo(u1.getCreatedAt()));
-                request.setAttribute(USERS_ATTRIBUTE, users);
-
-                int totalUsers = userService.getTotalUsers();
-                int newUsersThisMonth = userService.getNewUsersThisMonth();
-                request.setAttribute(TOTAL_USERS_ATTRIBUTE, totalUsers);
-                request.setAttribute(NEW_USERS_THIS_MONTH_ATTRIBUTE, newUsersThisMonth);
-
-                request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+                request.getRequestDispatcher(Constants.DASHBOARD_VIEW).forward(request, response);
+            } catch (SQLException e) {
+                LOGGER.error(Constants.DATABASE_ERROR, e);
             } catch (Exception e) {
-                LOGGER.error("Error processing request", e);
+                LOGGER.error(Constants.POST_REQUEST_ERROR, e);
             }
         }
+    }
+
+    private boolean isUserLoggedIn(HttpSession session) {
+        return session != null && session.getAttribute("user") != null;
+    }
+
+    private void setUserAttributes(HttpServletRequest request, User currentUser) {
+        String username = currentUser.getUsername();
+        UUID id = currentUser.getId();
+
+        request.setAttribute(Constants.USERNAME, username);
+        request.setAttribute(Constants.ID, id);
+    }
+
+    private void setDashboardData(HttpServletRequest request) throws SQLException {
+        List<User> users = userService.getAllUsers();
+        users.sort((User u1, User u2) -> u2.getCreatedAt().compareTo(u1.getCreatedAt()));
+        request.setAttribute(Constants.USERS, users);
+
+        int totalUsers = userService.getTotalUsers();
+        int newUsersThisMonth = userService.getNewUsersThisMonth();
+        request.setAttribute(Constants.TOTAL_USERS, totalUsers);
+        request.setAttribute(Constants.NEW_USERS_THIS_MONTH, newUsersThisMonth);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
@@ -120,7 +130,7 @@ public class DashboardServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "DashboardServlet";
+    }
 
 }

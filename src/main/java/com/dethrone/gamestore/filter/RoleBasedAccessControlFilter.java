@@ -62,14 +62,22 @@ public class RoleBasedAccessControlFilter implements Filter {
         boolean isStaticResource = request.getRequestURI().matches(".+\\.(css|jpg|png|gif|js)");
 
         if (loggedIn) {
-            User user = (User) session.getAttribute("user");
-            String role = user.getRole().name().toLowerCase();
-            String path = request.getRequestURI().substring(request.getContextPath().length());
+            if (session != null) {
+                User user = (User) session.getAttribute("user");
+                if (user != null) {
+                    String role = user.getRole().name().toLowerCase();
+                    String path = request.getRequestURI().substring(request.getContextPath().length());
 
-            if (path.startsWith("/admin") && !"admin".equals(role)) {
-                response.sendRedirect(request.getContextPath() + "/store");
+                    if (path.startsWith("/admin") && !"admin".equals(role)) {
+                        response.sendRedirect(request.getContextPath() + "/store");
+                    } else {
+                        chain.doFilter(request, response);
+                    }
+                } else {
+                    response.sendRedirect(loginURI);
+                }
             } else {
-                chain.doFilter(request, response);
+                // Handle the case where session is null
             }
         } else if (loginRequest || registerRequest || isStaticResource) {
             chain.doFilter(request, response);

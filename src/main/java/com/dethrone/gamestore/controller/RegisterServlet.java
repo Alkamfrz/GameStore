@@ -11,11 +11,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.dethrone.gamestore.Constants;
 import com.dethrone.gamestore.model.User;
-import com.dethrone.gamestore.service.SecurityService;
 import com.dethrone.gamestore.service.UserService;
 
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -31,19 +32,16 @@ import org.slf4j.LoggerFactory;
 @WebServlet(name = "RegisterServlet", urlPatterns = { "/register" })
 public class RegisterServlet extends HttpServlet {
 
-    private static final String USERNAME = "username";
-    private static final String FIRST_NAME = "firstName";
-    private static final String LAST_NAME = "lastName";
-    private static final String PASSWORD = "password";
-    private static final String EMAIL = "email";
-    private static final String ERROR_MESSAGE = "errorMessage";
-    private static final String SUCCESS_MESSAGE = "successMessage";
-    private static final String REGISTER_VIEW = "/WEB-INF/views/register.jsp";
-    private static final String LOGIN_REDIRECT = "/login";
     private static final Logger LOGGER = LoggerFactory.getLogger(RegisterServlet.class);
 
-    SecurityService securityService = new SecurityService();
-    UserService userService = new UserService(securityService);
+    private UserService userService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        ServletContext context = getServletContext();
+        userService = (UserService) context.getAttribute("userService");
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -87,11 +85,11 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String username = Optional.ofNullable(request.getParameter(USERNAME)).orElse("");
-            String firstName = Optional.ofNullable(request.getParameter(FIRST_NAME)).orElse("");
-            String lastName = Optional.ofNullable(request.getParameter(LAST_NAME)).orElse("");
-            String password = Optional.ofNullable(request.getParameter(PASSWORD)).orElse("");
-            String email = Optional.ofNullable(request.getParameter(EMAIL)).orElse("");
+            String username = Optional.ofNullable(request.getParameter(Constants.USERNAME)).orElse("");
+            String firstName = Optional.ofNullable(request.getParameter(Constants.FIRST_NAME)).orElse("");
+            String lastName = Optional.ofNullable(request.getParameter(Constants.LAST_NAME)).orElse("");
+            String password = Optional.ofNullable(request.getParameter(Constants.PASSWORD)).orElse("");
+            String email = Optional.ofNullable(request.getParameter(Constants.EMAIL)).orElse("");
 
             firstName = Arrays.stream(firstName.split(" "))
                     .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
@@ -103,8 +101,8 @@ public class RegisterServlet extends HttpServlet {
             List<String> errorMessage = validateFormData(username, firstName, lastName, password, email);
 
             if (errorMessage != null && !errorMessage.isEmpty()) {
-                request.setAttribute(ERROR_MESSAGE, errorMessage);
-                RequestDispatcher dispatcher = request.getRequestDispatcher(REGISTER_VIEW);
+                request.setAttribute(Constants.ERROR_MESSAGE, errorMessage);
+                RequestDispatcher dispatcher = request.getRequestDispatcher(Constants.REGISTER_VIEW);
                 dispatcher.forward(request, response);
             } else {
                 User user = new User();
@@ -115,11 +113,11 @@ public class RegisterServlet extends HttpServlet {
                 user.setLastName(lastName);
 
                 userService.registerUser(user);
-                request.getSession().setAttribute(SUCCESS_MESSAGE, "You have been successfully registered.");
-                response.sendRedirect(request.getContextPath() + LOGIN_REDIRECT);
+                request.getSession().setAttribute(Constants.SUCCESS_MESSAGE, Constants.REGISTRATION_SUCCESS);
+                response.sendRedirect(request.getContextPath() + Constants.LOGIN_URL);
             }
         } catch (Exception e) {
-            LOGGER.error("Error processing POST request", e);
+            LOGGER.error(Constants.POST_REQUEST_ERROR, e);
         }
     }
 
@@ -129,23 +127,23 @@ public class RegisterServlet extends HttpServlet {
         if (username.isEmpty() || userService.isUsernameExist(username) || firstName.isEmpty() || lastName.isEmpty()
                 || password.isEmpty() || email.isEmpty() || userService.isEmailExist(email)) {
             if (username.isEmpty()) {
-                errorMessages.add("Username is required.");
+                errorMessages.add(Constants.USERNAME_REQUIRED);
             } else if (userService.isUsernameExist(username)) {
-                errorMessages.add("Username is already taken.");
+                errorMessages.add(Constants.USERNAME_TAKEN);
             }
             if (firstName.isEmpty()) {
-                errorMessages.add("First name is required.");
+                errorMessages.add(Constants.FIRST_NAME_REQUIRED);
             }
             if (lastName.isEmpty()) {
-                errorMessages.add("Last name is required.");
+                errorMessages.add(Constants.LAST_NAME_REQUIRED);
             }
             if (password.isEmpty()) {
-                errorMessages.add("Password is required.");
+                errorMessages.add(Constants.PASSWORD_REQUIRED);
             }
             if (email.isEmpty()) {
-                errorMessages.add("Email is required.");
+                errorMessages.add(Constants.EMAIL_REQUIRED);
             } else if (userService.isEmailExist(email)) {
-                errorMessages.add("Email is already in use.");
+                errorMessages.add(Constants.EMAIL_IN_USE);
             }
         }
         return errorMessages;
@@ -158,7 +156,7 @@ public class RegisterServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "RegisterServlet";
+    }
 
 }

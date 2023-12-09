@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.dethrone</groupId>
     <artifactId>GameStore</artifactId>
-    <version>1.5.4</version>
+    <version>1.5.5</version>
     <packaging>war</packaging>
     <name>GameStore</name>
 
@@ -61,6 +61,16 @@
             <artifactId>hibernate-hikaricp</artifactId>
             <version>6.4.0.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>32.1.3-jre</version>
+        </dependency>      
     </dependencies>
 
     <build>

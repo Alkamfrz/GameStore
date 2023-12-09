@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC
-        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-        "http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
         <!-- Database connection settings -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">
-            jdbc:mysql://localhost:3306/gamestore?serverTimezone=Asia/Jakarta</property>
+        <property name="hibernate.connection.url"> jdbc:mysql://localhost:3306/gamestore</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password"></property>
-        <property name="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
-        <property name="hibernate.hikari.maximumPoolSize">20</property>
+        <property name="hibernate.connection.provider_class">
+            org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
+        <property name="hibernate.hikari.maximumPoolSize">10</property>
         <property name="hibernate.hikari.idleTimeout">30000</property>
 
         <!-- Batch Fetching -->
@@ -29,7 +27,7 @@
         <property name="hibernate.generate_statistics">false</property>
 
         <!-- Timezone -->
-        <property name="hibernate.jdbc.time_zone">UTC</property>
+        <property name="hibernate.jdbc.time_zone">UTC+7</property>
 
         <!-- Mapping files -->
         <mapping class="com.dethrone.gamestore.model.User" />
