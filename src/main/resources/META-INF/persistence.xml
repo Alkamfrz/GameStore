@@ -3,5 +3,9 @@
   <!-- Define Persistence Unit -->
   <persistence-unit name="my_persistence_unit">
     <class>com.dethrone.gamestore.model.User</class>
+    <class>com.dethrone.gamestore.model.Game</class>
+    <class>com.dethrone.gamestore.model.Genre</class>
+    <class>com.dethrone.gamestore.model.Publisher</class>
+    <class>com.dethrone.gamestore.model.Transaction</class>
   </persistence-unit>
 </persistence>

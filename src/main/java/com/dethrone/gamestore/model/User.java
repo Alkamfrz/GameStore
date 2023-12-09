@@ -21,7 +21,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "user_id")
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
@@ -34,8 +34,8 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private UUID id;
+    @Column(name = "user_id")
+    private UUID user_id;
 
     @NonNull
     @Size(min = 2, max = 50)

@@ -76,10 +76,12 @@ public class DashboardServlet extends HttpServlet {
 
     private void setUserAttributes(HttpServletRequest request, User currentUser) {
         String username = currentUser.getUsername();
-        UUID id = currentUser.getId();
+        UUID user_id = currentUser.getUser_id();
 
         request.setAttribute(Constants.USERNAME, username);
-        request.setAttribute(Constants.ID, id);
+        request.setAttribute(Constants.USER_ID, user_id);
+        request.setAttribute(Constants.ROLE, currentUser.getRole().toString().toLowerCase());
+
     }
 
     private void setDashboardData(HttpServletRequest request) throws SQLException {

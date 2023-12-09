@@ -13,7 +13,7 @@ public class Constants {
     public static final String USER_SESSION_ATTRIBUTE = "user";
 
     // User attributes
-    public static final String ID = "id";
+    public static final String USER_ID = "user_id";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String USERNAME_OR_EMAIL = "usernameOrEmail";
@@ -22,6 +22,9 @@ public class Constants {
     public static final String EMAIL = "email";
     public static final String ROLE = "role";
     public static final String CREATED_AT = "createdAt";
+    public static final String UPDATED_AT = "updatedAt";
+    public static final String DELETED_AT = "deletedAt";
+    public static final String LAST_LOGIN = "lastLogin";
     public static final String PHOTO = "photo";
     public static final String PROFILE_PHOTO = "profilePhoto";
 
@@ -32,6 +35,7 @@ public class Constants {
 
     // URLs
     public static final String LOGIN_URL = "/login";
+    public static final String REGISTER_URL = "/register";
     public static final String ADMIN_DASHBOARD = "/admin/dashboard";
     public static final String STORE = "/store";
     public static final String PROFILE = "/profile";

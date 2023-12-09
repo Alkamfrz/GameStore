@@ -64,12 +64,13 @@ public class ProfileServlet extends HttpServlet {
         } else {
             User currentUser = (User) session.getAttribute(Constants.USER_SESSION_ATTRIBUTE);
             setUserAttributes(request, currentUser);
+            
             request.getRequestDispatcher(Constants.PROFILE_VIEW).forward(request, response);
         }
     }
 
     private void setUserAttributes(HttpServletRequest request, User currentUser) {
-        request.setAttribute(Constants.ID, currentUser.getId());
+        request.setAttribute(Constants.USER_ID, currentUser.getUser_id());
         request.setAttribute(Constants.FIRST_NAME, currentUser.getFirstName());
         request.setAttribute(Constants.LAST_NAME, currentUser.getLastName());
         request.setAttribute(Constants.EMAIL, currentUser.getEmail());
@@ -77,7 +78,9 @@ public class ProfileServlet extends HttpServlet {
         request.setAttribute(Constants.USERNAME, currentUser.getUsername());
         request.setAttribute(Constants.PROFILE_PHOTO, currentUser.getProfilePhoto());
         request.setAttribute(Constants.CREATED_AT,
-                currentUser.getCreatedAt().format(DateTimeFormatter.ofPattern(Constants.DATE_FORMAT)));
+            currentUser.getCreatedAt().format(DateTimeFormatter.ofPattern(Constants.DATE_FORMAT)));
+        request.setAttribute(Constants.LAST_LOGIN,
+            currentUser.getLastLogin().format(DateTimeFormatter.ofPattern(Constants.DATE_FORMAT)));
     }
 
     /**
@@ -115,7 +118,7 @@ public class ProfileServlet extends HttpServlet {
                             com.google.common.io.Files.getFileExtension(profilePhotoPart.getSubmittedFileName());
                     try (InputStream fileContent = profilePhotoPart.getInputStream()) {
                         String userDirectoryPath = getServletContext().getRealPath(Constants.USER_DIRECTORY)
-                                + currentUser.getId().toString().replace("-", "").substring(0, 10) + "/";
+                                + currentUser.getUser_id().toString().replace("-", "").substring(0, 10) + "/";
                         Path userDirectory = Paths.get(userDirectoryPath);
                         Files.createDirectories(userDirectory);
 

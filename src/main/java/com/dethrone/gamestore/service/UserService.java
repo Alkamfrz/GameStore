@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.UUID;
 
 /**
  *
@@ -26,7 +27,7 @@ public class UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     private static final String QUERY_BY_USERNAME = "from User where username = :value";
     private static final String QUERY_BY_EMAIL = "from User where email = :value";
-    private static final String QUERY_BY_ID = "from User where id = :value";
+    private static final String QUERY_BY_ID = "from User where user_id = :value";
 
     public UserService(SecurityService securityService) {
         this.securityService = securityService;
@@ -113,8 +114,8 @@ public class UserService {
         return getUserByQuery(QUERY_BY_EMAIL, email);
     }
 
-    public Optional<User> getUserById(int id) {
-        return getUserByQuery(QUERY_BY_ID, id);
+    public Optional<User> getUserById(UUID user_id) {
+        return getUserByQuery(QUERY_BY_ID, user_id);
     }
 
     public List<User> getAllUsers() {

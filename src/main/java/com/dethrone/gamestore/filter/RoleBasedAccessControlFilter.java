@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import com.dethrone.gamestore.Constants;
 import com.dethrone.gamestore.model.User;
 
 import jakarta.servlet.Filter;
@@ -53,8 +54,8 @@ public class RoleBasedAccessControlFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpSession session = request.getSession(false);
 
-        String loginURI = request.getContextPath() + "/login";
-        String registerURI = request.getContextPath() + "/register";
+        String loginURI = request.getContextPath() + Constants.LOGIN_URL;
+        String registerURI = request.getContextPath() + Constants.REGISTER_URL;
 
         boolean loggedIn = session != null && session.getAttribute("user") != null;
         boolean loginRequest = request.getRequestURI().equals(loginURI);
