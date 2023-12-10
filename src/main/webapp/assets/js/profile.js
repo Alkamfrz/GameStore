@@ -18,20 +18,6 @@ $(document).ready(() => {
   adminButton.click(() => redirectTo("/GameStore/admin/dashboard"));
   storeButton.click(() => redirectTo("/GameStore/store"));
 
-  $("#profileForm").ajaxForm({
-    beforeSubmit: function () {
-      $('#profileForm input[type="submit"]').prop("disabled", true);
-    },
-    success: function (response) {
-      alert("Profile updated successfully");
-      $('#profileForm input[type="submit"]').prop("disabled", false);
-    },
-    error: function (error) {
-      alert("There was an error updating the profile");
-      $('#profileForm input[type="submit"]').prop("disabled", false);
-    },
-  });
-
   $('a[href="#profile-info"]').click(function(e) {
     e.preventDefault();
     showSection('profile-info');

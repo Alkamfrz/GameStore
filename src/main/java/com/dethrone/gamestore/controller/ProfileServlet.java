@@ -117,7 +117,7 @@ public class ProfileServlet extends HttpServlet {
                     String fileName = UUID.randomUUID().toString() + "." +
                             com.google.common.io.Files.getFileExtension(profilePhotoPart.getSubmittedFileName());
                     try (InputStream fileContent = profilePhotoPart.getInputStream()) {
-                        String userDirectoryPath = getServletContext().getRealPath(Constants.USER_DIRECTORY)
+                        String userDirectoryPath = getServletContext().getRealPath(Constants.USER_PHOTO_DIRECTORY)
                                 + currentUser.getUser_id().toString().replace("-", "").substring(0, 10) + "/";
                         Path userDirectory = Paths.get(userDirectoryPath);
                         Files.createDirectories(userDirectory);
