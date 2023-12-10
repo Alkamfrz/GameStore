@@ -89,6 +89,7 @@ public class RegisterServlet extends HttpServlet {
             String firstName = Optional.ofNullable(request.getParameter(Constants.FIRST_NAME)).orElse("");
             String lastName = Optional.ofNullable(request.getParameter(Constants.LAST_NAME)).orElse("");
             String password = Optional.ofNullable(request.getParameter(Constants.PASSWORD)).orElse("");
+            String confirmPassword = Optional.ofNullable(request.getParameter(Constants.CONFIRM_PASSWORD)).orElse("");
             String email = Optional.ofNullable(request.getParameter(Constants.EMAIL)).orElse("");
 
             firstName = Arrays.stream(firstName.split(" "))
@@ -98,7 +99,7 @@ public class RegisterServlet extends HttpServlet {
                     .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
                     .collect(Collectors.joining(" "));
 
-            List<String> errorMessage = validateFormData(username, firstName, lastName, password, email);
+            List<String> errorMessage = validateFormData(username, firstName, lastName, password, confirmPassword, email);
 
             if (errorMessage != null && !errorMessage.isEmpty()) {
                 request.setAttribute(Constants.ERROR_MESSAGE, errorMessage);
@@ -121,11 +122,11 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-    private List<String> validateFormData(String username, String firstName, String lastName, String password,
+    private List<String> validateFormData(String username, String firstName, String lastName, String password, String confirmPassword,
             String email) {
         List<String> errorMessages = new ArrayList<>();
         if (username.isEmpty() || userService.isUsernameExist(username) || firstName.isEmpty() || lastName.isEmpty()
-                || password.isEmpty() || email.isEmpty() || userService.isEmailExist(email)) {
+                || password.isEmpty() || !password.equals(confirmPassword) || email.isEmpty() || userService.isEmailExist(email)) {
             if (username.isEmpty()) {
                 errorMessages.add(Constants.USERNAME_REQUIRED);
             } else if (userService.isUsernameExist(username)) {
@@ -139,6 +140,8 @@ public class RegisterServlet extends HttpServlet {
             }
             if (password.isEmpty()) {
                 errorMessages.add(Constants.PASSWORD_REQUIRED);
+            } else if (!password.equals(confirmPassword)) {
+                errorMessages.add(Constants.PASSWORD_MISMATCH);
             }
             if (email.isEmpty()) {
                 errorMessages.add(Constants.EMAIL_REQUIRED);

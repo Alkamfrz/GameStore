@@ -57,6 +57,10 @@ public class SecurityService {
         return true;
     }
 
+    public boolean doPasswordsMatch(String password, String confirmPassword) {
+        return password.equals(confirmPassword);
+    }
+
     public void changePassword(User user, String newPassword) {
         validatePassword(newPassword);
         String salt = generateSalt();
