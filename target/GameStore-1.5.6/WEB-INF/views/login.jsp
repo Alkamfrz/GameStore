@@ -28,7 +28,7 @@
               </ul>
             </div>
           </div>
-          <% session.removeAttribute("errorMessage"); %>
+          <c:remove var="errorMessage" scope="session" />
         </c:if>
         <c:if test="${not empty successMessage}">
           <div id="success-messages">
@@ -39,7 +39,7 @@
               <span>${successMessage}</span>
             </div>
           </div>
-          <% session.removeAttribute("successMessage"); %>
+          <c:remove var="successMessage" scope="session" />
         </c:if>
         <div
           id="error"

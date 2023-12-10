@@ -1,62 +1,59 @@
-$(document).ready(function() {
-  anime({
-    targets: '.container',
-    translateY: [100, 0],
-    opacity: [0, 1],
-    duration: 1000,
-    easing: 'easeOutCubic',
-  });
+const EASING_QUAD = "easeInOutQuad";
+const DURATION_SHORT = 500;
+const DURATION_LONG = 1000;
 
-  if ($('#error-messages').length) {
-    anime({
-      targets: '#error-messages',
-      translateX: [{value: -10}, {value: 10}, {value: -10}, {value: 10}, {value: 0}],
-      duration: 500,
-      easing: 'easeInOutQuad',
-    });
+function animateElement(targets, properties, duration, easing) {
+  anime({
+    targets: targets,
+    ...properties,
+    duration: duration,
+    easing: easing,
+  });
+}
+
+$(document).ready(function () {
+  animateElement(".container", { translateY: [100, 0], opacity: [0, 1] }, DURATION_LONG, "easeOutCubic");
+
+  if ($("#error-messages").length) {
+    animateElement("#error-messages", { translateX: [{ value: -10 }, { value: 10 }, { value: -10 }, { value: 10 }, { value: 0 }] }, DURATION_SHORT, EASING_QUAD);
   }
 
-  if ($('#success-messages').length) {
-    anime({
-      targets: '#success-messages',
-      scale: [0, 1],
-      duration: 500,
-      easing: 'easeInOutQuad',
-    });
+  if ($("#success-messages").length) {
+    animateElement("#success-messages", { scale: [0, 1] }, DURATION_SHORT, EASING_QUAD);
   }
 
   $('button[type="submit"]').hover(
-    function() {
-      anime({
-        targets: this,
-        scale: [1, 1.05],
-        duration: 200,
-        easing: 'easeInOutQuad',
-      });
+    function () {
+      animateElement(this, { scale: [1, 1.05] }, 200, EASING_QUAD);
     },
-    function() {
-      anime({
-        targets: this,
-        scale: [1.05, 1],
-        duration: 200,
-        easing: 'easeInOutQuad',
-      });
+    function () {
+      animateElement(this, { scale: [1.05, 1] }, 200, EASING_QUAD);
     }
   );
 
-  $('input').focus(function() {
-    anime({
-      targets: this,
-      borderColor: ['#ddd', '#4a56e2'],
-      duration: 500,
-      easing: 'easeInOutQuad',
+  $("input")
+    .focus(function () {
+      animateElement(this, { borderColor: ["#ddd", "#4a56e2"] }, DURATION_SHORT, EASING_QUAD);
+    })
+    .blur(function () {
+      animateElement(this, { borderColor: ["#4a56e2", "#ddd"] }, DURATION_SHORT, EASING_QUAD);
     });
-  }).blur(function() {
-    anime({
-      targets: this,
-      borderColor: ['#4a56e2', '#ddd'],
-      duration: 500,
-      easing: 'easeInOutQuad',
-    });
+
+  $("form").on("submit", function (event) {
+    var enteredPassword = $("#password").val();
+    var confirmedPassword = $("#confirmPassword").val();
+
+    if (enteredPassword !== confirmedPassword) {
+      event.preventDefault();
+      var errorMessage = "<li>Passwords do not match.</li>";
+      $("#passwordError ul").empty();
+      $("#passwordError ul").append(errorMessage);
+      $("#passwordError").show();
+
+      animateElement("#passwordError", { translateX: [{ value: -10 }, { value: 10 }, { value: -10 }, { value: 10 }, { value: 0 }] }, DURATION_SHORT, EASING_QUAD);
+    } else {
+      $("#passwordError ul").empty();
+      $("#passwordError").hide();
+    }
   });
 });
