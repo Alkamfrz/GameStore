@@ -180,23 +180,25 @@
                     </thead>
                     <tbody>
                       <c:forEach var="transaction" items="${transactions}">
-                        <tr class="hover:bg-grey-lighter">
-                          <td class="py-2 px-4 border-b border-grey-light">
-                            ${transaction.user.firstName}
-                            ${transaction.user.lastName}
-                          </td>
-                          <td class="py-2 px-4 border-b border-grey-light">
-                            <fmt:formatDate
-                              value="${transaction.date}"
-                              pattern="dd/MM/yyyy"
-                            />
-                          </td>
-                          <td
-                            class="py-2 px-4 border-b border-grey-light text-right"
-                          >
-                            $${transaction.total}
-                          </td>
-                        </tr>
+                        <c:if test="${status.index < 10}">
+                          <tr class="hover:bg-grey-lighter">
+                            <td class="py-2 px-4 border-b border-grey-light">
+                              ${transaction.user.firstName}
+                              ${transaction.user.lastName}
+                            </td>
+                            <td class="py-2 px-4 border-b border-grey-light">
+                              <fmt:formatDate
+                                value="${transaction.date}"
+                                pattern="dd/MM/yyyy"
+                              />
+                            </td>
+                            <td
+                              class="py-2 px-4 border-b border-grey-light text-right"
+                            >
+                              $${transaction.total}
+                            </td>
+                          </tr>
+                        </c:if>
                       </c:forEach>
                     </tbody>
                   </table>
