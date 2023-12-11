@@ -2,6 +2,7 @@ package com.dethrone.gamestore.controller;
 
 import com.dethrone.gamestore.service.SecurityService;
 import com.dethrone.gamestore.service.UserService;
+import com.dethrone.gamestore.service.TransactionService;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
@@ -17,14 +18,14 @@ public class AppContextListener implements ServletContextListener {
 
         SecurityService securityService = new SecurityService();
         UserService userService = new UserService(securityService);
+        TransactionService transactionService = new TransactionService();
 
-        // store the services in the servlet context
         ctx.setAttribute("securityService", securityService);
         ctx.setAttribute("userService", userService);
+        ctx.setAttribute("transactionService", transactionService); 
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        // cleanup code if necessary
     }
 }

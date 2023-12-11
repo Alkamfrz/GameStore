@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.io.Serializable;
-import java.util.UUID;
+import java.util.*;
 
 /**
  *
@@ -22,6 +22,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "publisher")
 public class Publisher implements Serializable {
+
+    @OneToMany(mappedBy="publisher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Game> games;
 
     private static final long serialVersionUID = 1L;
     @Id

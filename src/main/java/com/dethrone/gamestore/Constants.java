@@ -29,10 +29,33 @@ public class Constants {
     public static final String PHOTO = "photo";
     public static final String PROFILE_PHOTO = "profilePhoto";
 
+    // Transaction attributes
+    public static final String TRANSACTION_ID = "transaction_id";
+    public static final String GAME_ID = "game_id";
+    public static final String TRANSACTION_DATE = "transaction_date";
+    public static final String TRANSACTION_AMOUNT = "transaction_amount";
+    public static final String TRANSACTION_STATUS = "transaction_status";
+
+    // Game attributes
+    public static final String GAME_NAME = "game_name";
+    public static final String GAME_PRICE = "game_price";
+    public static final String GAME_DESCRIPTION = "game_description";
+    public static final String GAME_IMAGE = "game_image";
+    public static final String GAME_PUBLISHER = "game_publisher";
+    public static final String GAME_GENRE = "game_genre";
+    public static final String GAME_RELEASE_DATE = "game_release_date";
+    public static final String GAME_RATING = "game_rating";
+
     // User statistics
     public static final String USERS = "users";
     public static final String TOTAL_USERS = "totalUsers";
     public static final String NEW_USERS_THIS_MONTH = "newUsersThisMonth";
+
+    // Transaction statistics
+    public static final String TRANSACTIONS = "transactions";
+    public static final String TOTAL_TRANSACTIONS = "totalTransactions";
+    public static final String TOTAL_SALES = "totalSales";
+    public static final String SALES_THIS_MONTH = "salesThisMonth";
 
     // URLs
     public static final String LOGIN_URL = "/login";

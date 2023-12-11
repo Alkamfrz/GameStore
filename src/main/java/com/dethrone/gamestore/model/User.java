@@ -9,7 +9,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -25,6 +25,9 @@ import org.hibernate.annotations.CreationTimestamp;
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
+
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+private List<Transaction> transactions;
 
     private static final long serialVersionUID = 1L;
 

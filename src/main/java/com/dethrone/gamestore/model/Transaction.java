@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 /**
  *
  * @author alkam
@@ -29,19 +31,17 @@ public class Transaction implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID transaction_id;
 
-    @NonNull
-    @Size(min = 2, max = 50)
-    @Column(name = "user_id")
-    private UUID user_id;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "game_id", nullable = false)
+    private Game game;
 
     @NonNull
-    @Size(min = 2, max = 50)
-    @Column(name = "game_id")
-    private UUID game_id;
-
-    @NonNull
-    @Size(min = 2, max = 50)
-    @Column(name = "transaction_date")
+    @Column(name = "transaction_date", updatable = false)
+    @CreationTimestamp
     private LocalDateTime transaction_date;
 
     @NonNull
@@ -50,12 +50,10 @@ public class Transaction implements Serializable {
     private String transaction_status;
 
     @NonNull
-    @Size(min = 2, max = 50)
     @Column(name = "transaction_total")
     private Integer transaction_total;
 
     @NonNull
-    @Size(min = 2, max = 50)
     @Column(name = "transaction_quantity")
     private Integer transaction_quantity;
 }

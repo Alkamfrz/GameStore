@@ -13,6 +13,7 @@ D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\LoginServl
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\model\User.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\LogoutServlet.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\service\UserService.java
+D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\service\TransactionService.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\RegisterServlet.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\model\Genre.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\AppContextListener.java

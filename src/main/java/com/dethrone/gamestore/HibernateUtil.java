@@ -12,6 +12,10 @@ import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.dethrone.gamestore.model.Game;
+import com.dethrone.gamestore.model.Genre;
+import com.dethrone.gamestore.model.Publisher;
+import com.dethrone.gamestore.model.Transaction;
 import com.dethrone.gamestore.model.User;
 
 import java.util.Optional;
@@ -32,6 +36,10 @@ public class HibernateUtil {
             try {
                 Configuration configuration = new Configuration();
                 configuration.addAnnotatedClass(User.class);
+                configuration.addAnnotatedClass(Transaction.class);
+                configuration.addAnnotatedClass(Publisher.class);
+                configuration.addAnnotatedClass(Game.class);
+                configuration.addAnnotatedClass(Genre.class);
                 configuration.configure();
                 registry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
                 sessionFactory = configuration.buildSessionFactory(registry);

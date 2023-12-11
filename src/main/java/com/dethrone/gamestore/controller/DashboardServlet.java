@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.UUID;
 
 import com.dethrone.gamestore.Constants;
+import com.dethrone.gamestore.model.Transaction;
 import com.dethrone.gamestore.model.User;
+import com.dethrone.gamestore.service.TransactionService;
 import com.dethrone.gamestore.service.UserService;
 
 import jakarta.servlet.ServletContext;
@@ -33,12 +35,14 @@ public class DashboardServlet extends HttpServlet {
     private static final Logger LOGGER = LoggerFactory.getLogger(DashboardServlet.class);
 
     private UserService userService;
+    private TransactionService transactionService;
 
     @Override
     public void init() throws ServletException {
         super.init();
         ServletContext context = getServletContext();
         userService = (UserService) context.getAttribute("userService");
+        transactionService = (TransactionService) context.getAttribute("transactionService");
     }
 
     /**
@@ -93,6 +97,9 @@ public class DashboardServlet extends HttpServlet {
         int newUsersThisMonth = userService.getNewUsersThisMonth();
         request.setAttribute(Constants.TOTAL_USERS, totalUsers);
         request.setAttribute(Constants.NEW_USERS_THIS_MONTH, newUsersThisMonth);
+
+        List<Transaction> transactions = transactionService.getAllTransactions();
+        request.setAttribute(Constants.TRANSACTIONS, transactions);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the

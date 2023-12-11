@@ -35,32 +35,23 @@ public class Game implements Serializable {
     private String game_name;
 
     @NonNull
-    @Size(min = 2, max = 50)
     @Column(name = "price")
     private Integer price;
 
     @NonNull
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 500)
     @Column(name = "description")
     private String description;
 
     @NonNull
-    @Size(min = 2, max = 50)
     @Column(name = "image")
     private String image;
 
-    @NonNull
-    @Size(min = 2, max = 50)
-    @Column(name = "genre_id")
-    private UUID genre_id;
-    
-    @NonNull
-    @Size(min = 2, max = 50)
-    @Column(name = "platform_id")
-    private UUID platform_id;
+    @ManyToOne
+    @JoinColumn(name = "genre_id", nullable = false)
+    private Genre genre;
 
-    @NonNull
-    @Size(min = 2, max = 50)
-    @Column(name = "publisher_id")
-    private UUID publisher_id;
+    @ManyToOne
+    @JoinColumn(name = "publisher_id", nullable = false)
+    private Publisher publisher;
 }
