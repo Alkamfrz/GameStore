@@ -11,6 +11,7 @@ D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\Constants.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\DashboardServlet.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\LoginServlet.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\model\User.java
+D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\UserServlet.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\LogoutServlet.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\service\UserService.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\service\TransactionService.java

@@ -4,7 +4,7 @@
   <jsp:include page="/WEB-INF/partials/header.jsp">
     <jsp:param name="title" value="User Management" />
     <jsp:param name="description" value="User Management" />
-    <jsp:param name="css" value="/GameStore/assets/css/userManagement.css" />
+    <jsp:param name="css" value="/GameStore/assets/css/users.css" />
   </jsp:include>
   <body>
     <main class="flex flex-col h-screen bg-gray-200">
@@ -76,15 +76,9 @@
                           <td class="py-2 px-4 border-b border-grey-light">
                             <button
                               class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-                              onclick="openEditModal('${user.id}')"
+                              onclick="openEditModal('${user.user_id}')"
                             >
                               Edit
-                            </button>
-                            <button
-                              class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded"
-                              onclick="deleteUser('${user.id}')"
-                            >
-                              Delete
                             </button>
                           </td>
                         </tr>
@@ -99,7 +93,7 @@
       </div>
     </main>
     <jsp:include page="/WEB-INF/partials/scripts.jsp">
-      <jsp:param name="js" value="/GameStore/assets/js/userManagement.js" />
+      <jsp:param name="js" value="/GameStore/assets/js/users.js" />
     </jsp:include>
   </body>
 </html>

@@ -81,10 +81,11 @@ public class DashboardServlet extends HttpServlet {
     private void setUserAttributes(HttpServletRequest request, User currentUser) {
         String username = currentUser.getUsername();
         UUID user_id = currentUser.getUser_id();
+        String role = currentUser.getRole().toString().toLowerCase();
 
         request.setAttribute(Constants.USERNAME, username);
         request.setAttribute(Constants.USER_ID, user_id);
-        request.setAttribute(Constants.ROLE, currentUser.getRole().toString().toLowerCase());
+        request.setAttribute(Constants.ROLE, role);
 
     }
 

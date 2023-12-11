@@ -10,7 +10,7 @@
       </a>
       <a
         class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-indigo-400 hover:to-indigo-300 hover:text-white"
-        href="#"
+        href="/GameStore/admin/users"
       >
         <i class="fas fa-users mr-2"></i>Users
       </a>
@@ -33,7 +33,7 @@
 
   <a
     class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-indigo-400 hover:to-indigo-300 hover:text-white mt-auto"
-    href="/GameStore/logout"
+    href="/GameStore/logout/"
   >
     <i class="fas fa-sign-out-alt mr-2"></i>Logout
   </a>

@@ -24,6 +24,7 @@
       <div class="py-4 px-8 w-full md:w-1/2">
         <label for="firstName" class="text-sm text-gray-600">First Name</label>
         <input
+          id="firstName"
           class="mt-2 border-2 border-gray-200 px-3 py-2 block w-full rounded-lg text-base text-gray-900 focus:outline-none focus:border-indigo-500"
           type="text"
           value="${firstName}"
@@ -33,6 +34,7 @@
       <div class="py-4 px-8 w-full md:w-1/2">
         <label for="lastName" class="text-sm text-gray-600">Last Name</label>
         <input
+          id="lastName"
           class="mt-2 border-2 border-gray-200 px-3 py-2 block w-full rounded-lg text-base text-gray-900 focus:outline-none focus:border-indigo-500"
           type="text"
           value="${lastName}"
@@ -42,20 +44,24 @@
       <div class="py-4 px-8 w-full md:w-1/2">
         <label for="email" class="text-sm text-gray-600">Email Address</label>
         <input
+          id="email"
           class="mt-2 border-2 border-gray-200 px-3 py-2 block w-full rounded-lg text-base text-gray-900 focus:outline-none focus:border-indigo-500"
           type="email"
           name="email"
           value="${email}"
+          autocomplete="off"
           disabled
         />
       </div>
       <div class="py-4 px-8 w-full md:w-1/2">
         <label for="username" class="text-sm text-gray-600">Username</label>
         <input
+          id="username"
           class="mt-2 border-2 border-gray-200 px-3 py-2 block w-full rounded-lg text-base text-gray-900 focus:outline-none focus:border-indigo-500"
           type="text"
           name="username"
           value="${username}"
+          autocomplete="off"
           disabled
         />
       </div>
@@ -73,6 +79,7 @@
           class="bg-gray-200 text-gray-500 text-xs mt-5 ml-3 font-bold px-4 py-2 rounded-lg float-left hover:bg-gray-300 hover:text-gray-600 relative overflow-hidden cursor-pointer"
         >
           <input
+            id="photo"
             type="file"
             name="photo"
             onchange="loadFile(event)"
