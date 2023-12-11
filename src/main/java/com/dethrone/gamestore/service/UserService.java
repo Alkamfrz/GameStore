@@ -4,6 +4,7 @@
  */
 package com.dethrone.gamestore.service;
 
+import com.dethrone.gamestore.Constants;
 import com.dethrone.gamestore.HibernateUtil;
 import com.dethrone.gamestore.model.User;
 import org.hibernate.Session;
@@ -16,6 +17,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.UUID;
+
+import java.io.File;
 
 /**
  *
@@ -199,5 +202,27 @@ public class UserService {
 
     public boolean isEmailExist(String email) {
         return getUserByEmail(email).isPresent();
+    }
+
+    public void nullifyAllProfilePhotos() {
+        executeInTransaction(session -> {
+            List<User> users = session.createQuery("from User", User.class).list();
+            for (User user : users) {
+                String photosDirectoryPath = Constants.USER_DIRECTORY
+                        + File.separator + user.getUser_id().toString().replace("-", "").substring(0, 10)
+                        + File.separator + Constants.USER_IMAGE_DIRECTORY;
+
+                File photosDirectory = new File(photosDirectoryPath);
+
+                if (user.getProfilePhoto() != null) {
+                    File photoFile = new File(photosDirectory, user.getProfilePhoto());
+
+                    if (!photoFile.exists()) {
+                        user.setProfilePhoto(null);
+                        session.merge(user);
+                    }
+                }
+            }
+        });
     }
 }

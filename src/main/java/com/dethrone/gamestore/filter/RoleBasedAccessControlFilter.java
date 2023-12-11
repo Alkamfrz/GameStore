@@ -60,7 +60,7 @@ public class RoleBasedAccessControlFilter implements Filter {
         boolean loggedIn = session != null && session.getAttribute("user") != null;
         boolean loginRequest = request.getRequestURI().equals(loginURI);
         boolean registerRequest = request.getRequestURI().equals(registerURI);
-        boolean isStaticResource = request.getRequestURI().matches(".+\\.(css|jpg|png|gif|js)");
+        boolean isStaticResource = request.getRequestURI().matches(".+\\.(css|jpg|png|gif|js|ico|svg|ttf|woff|woff2|eot)$");
 
         if (loggedIn) {
             if (session != null) {

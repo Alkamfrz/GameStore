@@ -20,6 +20,8 @@ public class AppContextListener implements ServletContextListener {
         UserService userService = new UserService(securityService);
         TransactionService transactionService = new TransactionService();
 
+        userService.nullifyAllProfilePhotos();
+
         ctx.setAttribute("securityService", securityService);
         ctx.setAttribute("userService", userService);
         ctx.setAttribute("transactionService", transactionService); 

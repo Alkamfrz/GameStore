@@ -5,7 +5,7 @@
   <div class="flex items-center">
     <div class="hidden md:flex items-center">
       <img
-        src="https://www.emprenderconactitud.com/img/POC%20WCS%20(1).png"
+        src="/GameStore/assets/img/logo.png"
         alt="Logo"
         class="w-28 h-18 mr-2"
       />

@@ -1,0 +1,26 @@
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.search-input {
+  z-index: 1;
+}
+
+.dropdown-menu {
+  z-index: 2;
+}
+
+#sideNav {
+  max-width: 200px;
+  transition: max-width 0.5s ease;
+}
+
+@media (max-width: 768px) {
+  .flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .section-small {
+    width: 50%;
+  }
+}
