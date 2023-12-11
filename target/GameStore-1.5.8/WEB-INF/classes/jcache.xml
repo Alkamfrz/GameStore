@@ -1,6 +1,6 @@
 <config xmlns='http://www.ehcache.org/v3' xmlns:jsr107='http://www.ehcache.org/v3/jsr107'>
     <service>
-        <jsr107:defaults enable-management="true" enable-statistics="true"/>
+        <jsr107:defaults enable-management="true" enable-statistics="true" />
     </service>
     <cache alias="default">
         <key-type>java.lang.Object</key-type>

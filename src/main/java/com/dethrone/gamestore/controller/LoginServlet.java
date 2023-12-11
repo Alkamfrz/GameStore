@@ -65,7 +65,12 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        User sessionUser = (User) request.getSession().getAttribute("user");
+        if (sessionUser != null) {
+            redirectToPageBasedOnRole(sessionUser, request, response);
+        } else {
+            processRequest(request, response);
+        }
     }
 
     /**
@@ -80,6 +85,12 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            User sessionUser = (User) request.getSession().getAttribute("user");
+            if (sessionUser != null) {
+                redirectToPageBasedOnRole(sessionUser, request, response);
+                return;
+            }
+
             String usernameOrEmail = request.getParameter(Constants.USERNAME_OR_EMAIL);
             String password = request.getParameter(Constants.PASSWORD);
 
