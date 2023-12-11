@@ -99,10 +99,10 @@
                           class="py-2 px-4 border-b border-grey-light flex justify-center items-center"
                         >
                           <img src="${empty user.profilePhoto ?
-                          '/GameStore/assets/img/users/default.png' :
-                          '/GameStore/assets/img/users/'.concat(user.user_id.toString().replace("-",
+                          '/GameStore/assets/user_profile/default.png' :
+                          '/GameStore/assets/user_profile/'.concat(user.user_id.toString().replace("-",
                           "").substring(0,
-                          10)).concat('/').concat(user.profilePhoto)}"
+                          10)).concat('/images/').concat(user.profilePhoto)}"
                           alt="Profile Photo" class="rounded-full h-10 w-10" />
                         </td>
                         <td class="py-2 px-4 border-b border-grey-light">

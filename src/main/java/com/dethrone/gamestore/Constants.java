@@ -44,7 +44,7 @@ public class Constants {
     public static final String DASHBOARD_VIEW = "/WEB-INF/views/dashboard.jsp";
     public static final String PROFILE_VIEW = "/WEB-INF/views/profile.jsp";
     public static final String REGISTER_VIEW = "/WEB-INF/views/register.jsp";
-    public static final String USER_PHOTO_DIRECTORY = "/assets/img/users/";
+    public static final String USER_DIRECTORY = "/assets/user_profile/";
 
     // Error messages
     public static final String ERROR_MESSAGE = "errorMessage";

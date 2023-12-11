@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.dethrone.gamestore.controller;
+package com.dethrone.gamestore.controller.profile;
 
 import com.dethrone.gamestore.Constants;
 import com.dethrone.gamestore.model.User;
@@ -117,8 +117,8 @@ public class ProfileServlet extends HttpServlet {
                     String fileName = UUID.randomUUID().toString() + "." +
                             com.google.common.io.Files.getFileExtension(profilePhotoPart.getSubmittedFileName());
                     try (InputStream fileContent = profilePhotoPart.getInputStream()) {
-                        String userDirectoryPath = getServletContext().getRealPath(Constants.USER_PHOTO_DIRECTORY)
-                                + currentUser.getUser_id().toString().replace("-", "").substring(0, 10) + "/";
+                        String userDirectoryPath = getServletContext().getRealPath(Constants.USER_DIRECTORY)
+                                + currentUser.getUser_id().toString().replace("-", "").substring(0, 10) + "/images/";
                         Path userDirectory = Paths.get(userDirectoryPath);
                         Files.createDirectories(userDirectory);
 

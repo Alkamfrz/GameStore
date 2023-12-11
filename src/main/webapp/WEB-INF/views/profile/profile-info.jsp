@@ -63,9 +63,9 @@
         >
         <img class="rounded-full w-16 h-16 border-4 mt-2 border-gray-200
         float-left" id="photo" src="${empty user.profilePhoto ?
-        '/GameStore/assets/img/users/default.png' :
-        '/GameStore/assets/img/users/'.concat(user.user_id.toString().replace("-",
-        "").substring(0, 10)).concat('/').concat(user.profilePhoto)}"
+        '/GameStore/assets/user_profile/default.png' :
+        '/GameStore/assets/user_profile/'.concat(user.user_id.toString().replace("-",
+        "").substring(0, 10)).concat('/images/').concat(user.profilePhoto)}"
         alt="photo" />
         <div
           class="bg-gray-200 text-gray-500 text-xs mt-5 ml-3 font-bold px-4 py-2 rounded-lg float-left hover:bg-gray-300 hover:text-gray-600 relative overflow-hidden cursor-pointer"
@@ -78,6 +78,9 @@
           />
           Change Photo
         </div>
+        <button id="deletePhotoButton" class="bg-red-500 text-white text-xs mt-5 ml-3 font-bold px-4 py-2 rounded-lg float-left hover:bg-red-700 cursor-pointer">
+          Delete Photo
+        </button>
       </div>
     </div>
   </article>

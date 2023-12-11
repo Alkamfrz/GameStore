@@ -10,6 +10,29 @@ function loadFile(event) {
   image.src = URL.createObjectURL(event.target.files[0]);
 }
 
+function deletePhoto() {
+  $("#deletePhotoButton").prop("disabled", true);
+
+  $.ajax({
+    type: "POST",
+    url: "/GameStore/profile/photo",
+    success: function (response) {
+      if (response.status === "success") {
+        $("#photo").attr("src", "/GameStore/assets/user_profile/default.png");
+        $("#deletePhotoButton").hide();
+      } else {
+        console.error("Failed to delete photo");
+      }
+    },
+    error: function (error) {
+      console.error("Error:", error);
+    },
+    complete: function () {
+      $("#deletePhotoButton").prop("disabled", false);
+    },
+  });
+}
+
 $(document).ready(() => {
   setupDropdownAnimation();
   const adminButton = $("#adminButton");
@@ -18,24 +41,39 @@ $(document).ready(() => {
   adminButton.click(() => redirectTo("/GameStore/admin/dashboard"));
   storeButton.click(() => redirectTo("/GameStore/store"));
 
-  $('a[href="#profile-info"]').click(function(e) {
+  $('a[href="#profile-info"]').click(function (e) {
     e.preventDefault();
-    showSection('profile-info');
+    showSection("profile-info");
     updateAriaCurrent(this);
   });
-  $('a[href="#security"]').click(function(e) {
+  $('a[href="#security"]').click(function (e) {
     e.preventDefault();
-    showSection('security');
+    showSection("security");
     updateAriaCurrent(this);
   });
 
-  showSection('profile-info');
+  if (
+    $("#photo").attr("src") === "/GameStore/assets/user_profile/default.png"
+  ) {
+    $("#deletePhotoButton").hide();
+  }
+
+  $("#deletePhotoButton").click(function (e) {
+    e.preventDefault();
+    deletePhoto();
+  });
+
+  showSection("profile-info");
   updateAriaCurrent($('a[href="#profile-info"]'));
 });
 
 function updateAriaCurrent(element) {
-  $('nav[role="navigation"] a').removeAttr('aria-current').removeClass('text-gray-900 border-b-2 border-gray-800');
-  $(element).attr('aria-current', 'page').addClass('text-gray-900 border-b-2 border-gray-800');
+  $('nav[role="navigation"] a')
+    .removeAttr("aria-current")
+    .removeClass("text-gray-900 border-b-2 border-gray-800");
+  $(element)
+    .attr("aria-current", "page")
+    .addClass("text-gray-900 border-b-2 border-gray-800");
 }
 
 const redirectTo = (url) => {
