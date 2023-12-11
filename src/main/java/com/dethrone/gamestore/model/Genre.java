@@ -10,7 +10,6 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.*;
 
-
 /**
  *
  * @author alkam
@@ -24,7 +23,7 @@ import java.util.*;
 @Table(name = "genre")
 public class Genre implements Serializable {
 
-    @OneToMany(mappedBy="genre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Game> games;
 
     private static final long serialVersionUID = 1L;

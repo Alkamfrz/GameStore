@@ -24,7 +24,7 @@ public class AppContextListener implements ServletContextListener {
 
         ctx.setAttribute("securityService", securityService);
         ctx.setAttribute("userService", userService);
-        ctx.setAttribute("transactionService", transactionService); 
+        ctx.setAttribute("transactionService", transactionService);
     }
 
     @Override

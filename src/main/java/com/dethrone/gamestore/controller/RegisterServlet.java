@@ -99,7 +99,8 @@ public class RegisterServlet extends HttpServlet {
                     .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
                     .collect(Collectors.joining(" "));
 
-            List<String> errorMessage = validateFormData(username, firstName, lastName, password, confirmPassword, email);
+            List<String> errorMessage = validateFormData(username, firstName, lastName, password, confirmPassword,
+                    email);
 
             if (errorMessage != null && !errorMessage.isEmpty()) {
                 request.setAttribute(Constants.ERROR_MESSAGE, errorMessage);
@@ -122,11 +123,13 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-    private List<String> validateFormData(String username, String firstName, String lastName, String password, String confirmPassword,
+    private List<String> validateFormData(String username, String firstName, String lastName, String password,
+            String confirmPassword,
             String email) {
         List<String> errorMessages = new ArrayList<>();
         if (username.isEmpty() || userService.isUsernameExist(username) || firstName.isEmpty() || lastName.isEmpty()
-                || password.isEmpty() || !password.equals(confirmPassword) || email.isEmpty() || userService.isEmailExist(email)) {
+                || password.isEmpty() || !password.equals(confirmPassword) || email.isEmpty()
+                || userService.isEmailExist(email)) {
             if (username.isEmpty()) {
                 errorMessages.add(Constants.USERNAME_REQUIRED);
             } else if (userService.isUsernameExist(username)) {

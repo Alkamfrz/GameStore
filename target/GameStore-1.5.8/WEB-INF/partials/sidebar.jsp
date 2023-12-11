@@ -3,11 +3,11 @@
   <nav>
     <c:if test="${role == 'admin'}">
       <a
-      class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-indigo-400 hover:to-indigo-300 hover:text-white"
-      href="/GameStore/admin/dashboard"
-    >
-      <i class="fas fa-home mr-2"></i>Dashboard
-    </a>
+        class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-indigo-400 hover:to-indigo-300 hover:text-white"
+        href="/GameStore/admin/dashboard"
+      >
+        <i class="fas fa-home mr-2"></i>Dashboard
+      </a>
       <a
         class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-indigo-400 hover:to-indigo-300 hover:text-white"
         href="#"

@@ -7,7 +7,7 @@
       <img
         src="/GameStore/assets/img/logo.png"
         alt="Logo"
-        class="w-28 h-18 mr-2"
+        class="w-18 h-8 mr-2"
       />
       <h2 class="font-bold text-xl text-gray-700">${param.title}</h2>
     </div>

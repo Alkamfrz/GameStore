@@ -23,7 +23,7 @@ import java.util.*;
 @Table(name = "publisher")
 public class Publisher implements Serializable {
 
-    @OneToMany(mappedBy="publisher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Game> games;
 
     private static final long serialVersionUID = 1L;

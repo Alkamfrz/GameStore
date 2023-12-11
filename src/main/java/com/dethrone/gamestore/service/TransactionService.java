@@ -49,7 +49,8 @@ public class TransactionService {
 
     public Optional<Transaction> getTransactionById(UUID transaction_id) {
         return executeQuery(session -> {
-            List<Transaction> transactions = session.createQuery(QUERY_BY_USER_ID, Transaction.class).setParameter("value", transaction_id).getResultList();
+            List<Transaction> transactions = session.createQuery(QUERY_BY_USER_ID, Transaction.class)
+                    .setParameter("value", transaction_id).getResultList();
             if (transactions.isEmpty()) {
                 return Optional.empty();
             } else {
@@ -63,7 +64,8 @@ public class TransactionService {
     }
 
     public List<Transaction> getTransactionsByUserId(UUID user_id) {
-        return executeQuery(session -> session.createQuery(QUERY_BY_USER_ID, Transaction.class).setParameter("value", user_id).getResultList());
+        return executeQuery(session -> session.createQuery(QUERY_BY_USER_ID, Transaction.class)
+                .setParameter("value", user_id).getResultList());
     }
 
     public void updateTransaction(Transaction transaction) {

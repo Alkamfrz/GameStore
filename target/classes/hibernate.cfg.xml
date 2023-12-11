@@ -9,7 +9,7 @@
         <property name="hibernate.connection.password"></property>
         <property name="hibernate.connection.provider_class">
             org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
-        <property name="hibernate.hikari.maximumPoolSize">10</property>
+        <property name="hibernate.hikari.maximumPoolSize">20</property>
         <property name="hibernate.hikari.idleTimeout">30000</property>
 
         <!-- Batch Fetching -->
@@ -28,6 +28,10 @@
 
         <!-- Timezone -->
         <property name="hibernate.jdbc.time_zone">UTC+7</property>
+
+        <!-- Second-level cache settings -->
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.region.factory_class">jcache</property>
 
         <!-- Mapping files -->
         <mapping class="com.dethrone.gamestore.model.User" />

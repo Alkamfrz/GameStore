@@ -59,7 +59,8 @@ public class PhotoServlet extends HttpServlet {
      * @throws IOException      if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute(Constants.USER_SESSION_ATTRIBUTE) == null) {
             response.sendRedirect(request.getContextPath() + Constants.LOGIN_URL);
@@ -75,7 +76,7 @@ public class PhotoServlet extends HttpServlet {
                 currentUser.setProfilePhoto(null);
                 userService.updateUser(currentUser);
                 session.setAttribute(Constants.USER_SESSION_ATTRIBUTE, currentUser);
-                
+
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("{\"status\": \"success\"}");

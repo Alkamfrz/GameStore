@@ -26,8 +26,8 @@ import org.hibernate.annotations.CreationTimestamp;
 @Table(name = "users")
 public class User implements Serializable {
 
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-private List<Transaction> transactions;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaction> transactions;
 
     private static final long serialVersionUID = 1L;
 

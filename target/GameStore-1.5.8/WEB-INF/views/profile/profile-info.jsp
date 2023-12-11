@@ -17,7 +17,9 @@
       </p>
       <p class="text-xs text-gray-500 font-bold mt-2">
         Last Login: <c:out value="${lastLogin}" />
+      </p>
     </aside>
+
     <div class="md:w-2/3 w-full flex flex-wrap">
       <div class="py-4 px-8 w-full md:w-1/2">
         <label for="firstName" class="text-sm text-gray-600">First Name</label>
@@ -78,7 +80,10 @@
           />
           Change Photo
         </div>
-        <button id="deletePhotoButton" class="bg-red-500 text-white text-xs mt-5 ml-3 font-bold px-4 py-2 rounded-lg float-left hover:bg-red-700 cursor-pointer">
+        <button
+          id="deletePhotoButton"
+          class="bg-red-500 text-white text-xs mt-5 ml-3 font-bold px-4 py-2 rounded-lg float-left hover:bg-red-700 cursor-pointer"
+        >
           Delete Photo
         </button>
       </div>
