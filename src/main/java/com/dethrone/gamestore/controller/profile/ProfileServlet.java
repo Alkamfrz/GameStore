@@ -63,6 +63,14 @@ public class ProfileServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + Constants.LOGIN_URL);
         } else {
             User currentUser = (User) session.getAttribute(Constants.USER_SESSION_ATTRIBUTE);
+            Optional<User> optionalUser = userService.getUserById(currentUser.getUser_id());
+            if (optionalUser.isPresent()) {
+                currentUser = optionalUser.get();
+            } else {
+                response.sendRedirect(request.getContextPath() + Constants.LOGIN_URL);
+                return;
+            }
+
             setUserAttributes(request, currentUser);
 
             request.getRequestDispatcher(Constants.PROFILE_VIEW).forward(request, response);

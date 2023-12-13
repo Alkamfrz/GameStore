@@ -1,0 +1,6 @@
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+#menu-toggle:checked + #menu {
+  display: block;
+}

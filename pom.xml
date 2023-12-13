@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.dethrone</groupId>
     <artifactId>GameStore</artifactId>
-    <version>1.5.8</version>
+    <version>1.5.9</version>
     <packaging>war</packaging>
     <name>GameStore</name>
 
@@ -93,7 +93,12 @@
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
             <version>3.1.8</version>
-        </dependency>      
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
     </dependencies>
 
     <build>

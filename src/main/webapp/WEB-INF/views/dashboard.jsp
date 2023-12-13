@@ -133,11 +133,13 @@
                     </tbody>
                   </table>
                   <div class="text-right mt-4">
-                    <button
-                      class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded"
-                    >
-                      See more
-                    </button>
+                    <a href="/GameStore/admin/users">
+                      <button
+                        class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded"
+                      >
+                        See more
+                      </button>
+                    </a>
                   </div>
                 </c:otherwise>
               </c:choose>
@@ -203,11 +205,13 @@
                     </tbody>
                   </table>
                   <div class="text-right mt-4">
-                    <button
-                      class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded"
-                    >
-                      See more
-                    </button>
+                    <a href="/GameStore/admin/transactions">
+                      <button
+                        class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded"
+                      >
+                        See more
+                      </button>
+                    </a>
                   </div>
                 </c:otherwise>
               </c:choose>

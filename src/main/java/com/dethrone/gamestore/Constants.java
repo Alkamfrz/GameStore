@@ -65,9 +65,10 @@ public class Constants {
     public static final String PROFILE = "/profile";
     public static final String LOGIN_VIEW = "/WEB-INF/views/login.jsp";
     public static final String DASHBOARD_VIEW = "/WEB-INF/views/dashboard.jsp";
-    public static final String PROFILE_VIEW = "/WEB-INF/views/profile.jsp";
+    public static final String PROFILE_VIEW = "/WEB-INF/views/profile/profile.jsp";
     public static final String REGISTER_VIEW = "/WEB-INF/views/register.jsp";
     public static final String USERS_VIEW = "/WEB-INF/views/users.jsp";
+    public static final String STORE_VIEW = "/WEB-INF/views/store.jsp";
     public static final String USER_DIRECTORY = "/assets/user_profile/";
     public static final String USER_IMAGE_DIRECTORY = "/images/";
 
