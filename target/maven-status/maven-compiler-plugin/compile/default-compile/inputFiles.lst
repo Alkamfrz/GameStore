@@ -1,9 +1,7 @@
-D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\profile\ProfileServlet.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\resources\JakartaEE10Resource.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\model\Transaction.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\service\SecurityService.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\JakartaRestConfiguration.java
-D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\profile\PhotoServlet.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\HibernateUtil.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\model\Game.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\model\Publisher.java
@@ -12,6 +10,7 @@ D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\DashboardS
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\LoginServlet.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\model\User.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\UserServlet.java
+D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\ProfileServlet.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\controller\LogoutServlet.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\service\UserService.java
 D:\Rizz\OOP\GameStore\src\main\java\com\dethrone\gamestore\service\TransactionService.java

@@ -1,7 +1,6 @@
 com\dethrone\gamestore\HibernateUtil.class
 com\dethrone\gamestore\HibernateUtil$SessionFactoryHolder.class
 com\dethrone\gamestore\model\Transaction$TransactionBuilder.class
-com\dethrone\gamestore\controller\profile\PhotoServlet.class
 com\dethrone\gamestore\model\Transaction.class
 com\dethrone\gamestore\model\Game.class
 com\dethrone\gamestore\controller\LogoutServlet.class
@@ -14,6 +13,7 @@ com\dethrone\gamestore\resources\JakartaEE10Resource.class
 com\dethrone\gamestore\controller\RegisterServlet.class
 com\dethrone\gamestore\Constants.class
 com\dethrone\gamestore\service\TransactionService.class
+com\dethrone\gamestore\controller\ProfileServlet.class
 com\dethrone\gamestore\service\UserService.class
 com\dethrone\gamestore\controller\DashboardServlet.class
 com\dethrone\gamestore\controller\AppContextListener.class
@@ -21,7 +21,6 @@ com\dethrone\gamestore\service\UserService$CustomNonUniqueResultException.class
 com\dethrone\gamestore\filter\RoleBasedAccessControlFilter.class
 com\dethrone\gamestore\model\Publisher$PublisherBuilder.class
 com\dethrone\gamestore\JakartaRestConfiguration.class
-com\dethrone\gamestore\controller\profile\ProfileServlet.class
 com\dethrone\gamestore\model\Publisher.class
 com\dethrone\gamestore\model\User$UserBuilder.class
 com\dethrone\gamestore\model\Game$GameBuilder.class

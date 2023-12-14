@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package com.dethrone.gamestore.controller.profile;
+package com.dethrone.gamestore.controller;
 
 import com.dethrone.gamestore.Constants;
 import com.dethrone.gamestore.model.User;
@@ -22,7 +22,7 @@ import java.util.*;
  *
  * @author alkam
  */
-@WebServlet(name = "ProfileServlet", urlPatterns = { "/profile" })
+@WebServlet(name = "ProfileServlet", urlPatterns = { "/profile/*" })
 @MultipartConfig
 public class ProfileServlet extends HttpServlet {
 
@@ -107,45 +107,68 @@ public class ProfileServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + Constants.LOGIN_URL);
         } else {
             User currentUser = (User) session.getAttribute(Constants.USER_SESSION_ATTRIBUTE);
-            String firstName = Optional.ofNullable(request.getParameter(Constants.FIRST_NAME))
-                    .orElseThrow(() -> new ServletException(Constants.FIRST_NAME_REQUIRED));
-            String lastName = Optional.ofNullable(request.getParameter(Constants.LAST_NAME))
-                    .orElseThrow(() -> new ServletException(Constants.LAST_NAME_REQUIRED));
+            String pathInfo = request.getPathInfo();
+            if (pathInfo != null && pathInfo.equals("/deletephoto")) {
+                String userDirectoryPath = getServletContext().getRealPath(Constants.USER_DIRECTORY)
+                        + currentUser.getUser_id().toString().replace("-", "").substring(0, 10) + "/images/";
+                Path userDirectory = Paths.get(userDirectoryPath);
 
-            List<String> errorMessage = validateFormData(firstName, lastName);
-            if (!errorMessage.isEmpty()) {
-                request.setAttribute(Constants.ERROR_MESSAGE, errorMessage);
-                request.getRequestDispatcher(Constants.PROFILE_VIEW).forward(request, response);
-            } else {
-                currentUser.setFirstName(firstName);
-                currentUser.setLastName(lastName);
+                if (currentUser.getProfilePhoto() != null) {
+                    Path oldPhotoPath = userDirectory.resolve(currentUser.getProfilePhoto());
+                    Files.deleteIfExists(oldPhotoPath);
+                    currentUser.setProfilePhoto(null);
+                    userService.updateUser(currentUser);
+                    session.setAttribute(Constants.USER_SESSION_ATTRIBUTE, currentUser);
 
-                Part profilePhotoPart = request.getPart(Constants.PHOTO);
-                if (profilePhotoPart != null && profilePhotoPart.getSize() > 0) {
-                    String fileName = UUID.randomUUID().toString() + "." +
-                            com.google.common.io.Files.getFileExtension(profilePhotoPart.getSubmittedFileName());
-                    try (InputStream fileContent = profilePhotoPart.getInputStream()) {
-                        String userDirectoryPath = getServletContext().getRealPath(Constants.USER_DIRECTORY)
-                                + currentUser.getUser_id().toString().replace("-", "").substring(0, 10)
-                                + Constants.USER_IMAGE_DIRECTORY;
-                        Path userDirectory = Paths.get(userDirectoryPath);
-                        Files.createDirectories(userDirectory);
-
-                        if (currentUser.getProfilePhoto() != null) {
-                            Path oldPhotoPath = userDirectory.resolve(currentUser.getProfilePhoto());
-                            Files.deleteIfExists(oldPhotoPath);
-                        }
-
-                        Files.copy(fileContent, userDirectory.resolve(fileName),
-                                StandardCopyOption.REPLACE_EXISTING);
-                        currentUser.setProfilePhoto(fileName);
-                    }
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("{\"status\": \"success\"}");
+                } else {
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("{\"status\": \"failure\"}");
                 }
+            } else {
+                String firstName = Optional.ofNullable(request.getParameter(Constants.FIRST_NAME))
+                        .orElseThrow(() -> new ServletException(Constants.FIRST_NAME_REQUIRED));
+                String lastName = Optional.ofNullable(request.getParameter(Constants.LAST_NAME))
+                        .orElseThrow(() -> new ServletException(Constants.LAST_NAME_REQUIRED));
 
-                userService.updateUser(currentUser);
-                session.setAttribute(Constants.USER_SESSION_ATTRIBUTE, currentUser);
+                List<String> errorMessage = validateFormData(firstName, lastName);
+                if (!errorMessage.isEmpty()) {
+                    request.setAttribute(Constants.ERROR_MESSAGE, errorMessage);
+                    request.getRequestDispatcher(Constants.PROFILE_VIEW).forward(request, response);
+                } else {
+                    currentUser.setFirstName(firstName);
+                    currentUser.setLastName(lastName);
 
-                response.sendRedirect(request.getContextPath() + Constants.PROFILE);
+                    Part profilePhotoPart = request.getPart(Constants.PHOTO);
+                    if (profilePhotoPart != null && profilePhotoPart.getSize() > 0) {
+                        String fileName = UUID.randomUUID().toString() + "." +
+                                com.google.common.io.Files.getFileExtension(profilePhotoPart.getSubmittedFileName());
+                        try (InputStream fileContent = profilePhotoPart.getInputStream()) {
+                            String userDirectoryPath = getServletContext().getRealPath(Constants.USER_DIRECTORY)
+                                    + currentUser.getUser_id().toString().replace("-", "").substring(0, 10)
+                                    + Constants.USER_IMAGE_DIRECTORY;
+                            Path userDirectory = Paths.get(userDirectoryPath);
+                            Files.createDirectories(userDirectory);
+
+                            if (currentUser.getProfilePhoto() != null) {
+                                Path oldPhotoPath = userDirectory.resolve(currentUser.getProfilePhoto());
+                                Files.deleteIfExists(oldPhotoPath);
+                            }
+
+                            Files.copy(fileContent, userDirectory.resolve(fileName),
+                                    StandardCopyOption.REPLACE_EXISTING);
+                            currentUser.setProfilePhoto(fileName);
+                        }
+                    }
+
+                    userService.updateUser(currentUser);
+                    session.setAttribute(Constants.USER_SESSION_ATTRIBUTE, currentUser);
+
+                    response.sendRedirect(request.getContextPath() + Constants.PROFILE);
+                }
             }
         }
     }
