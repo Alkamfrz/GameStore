@@ -8,13 +8,29 @@ $(document).ready(() => {
 const setupSearchFilter = () => {
   $("#searchInput").on("keyup", function () {
     var value = $(this).val().toLowerCase();
+    var hasVisibleRows = false;
+
     $("table").each(function () {
       $(this)
         .find("tbody tr")
         .filter(function () {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+          var isVisible = $(this).text().toLowerCase().indexOf(value) > -1;
+          $(this).toggle(isVisible);
+          if (isVisible) {
+            hasVisibleRows = true;
+          }
         });
     });
+
+    if (hasVisibleRows) {
+      $("table").show();
+      $("#noDataMessage").hide();
+      $("#seeMore").show();
+    } else {
+      $("table").hide();
+      $("#noDataMessage").show();
+      $("#seeMore").hide();
+    }
   });
 };
 

@@ -78,6 +78,13 @@
                   </div>
                 </c:when>
                 <c:otherwise>
+                  <div
+                    class="flex justify-center items-center"
+                    id="noDataMessage"
+                    style="display: none"
+                  >
+                    No Data
+                  </div>
                   <table class="w-full table-auto text-sm">
                     <thead>
                       <tr class="text-sm leading-normal">
@@ -135,6 +142,7 @@
                   <div class="text-right mt-4">
                     <a href="/GameStore/admin/users">
                       <button
+                        id="seeMore"
                         class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded"
                       >
                         See more
@@ -160,6 +168,13 @@
                   </div>
                 </c:when>
                 <c:otherwise>
+                  <div
+                    class="flex justify-center items-center"
+                    id="noDataMessage"
+                    style="display: none"
+                  >
+                    No Data
+                  </div>
                   <table class="w-full table-auto text-sm">
                     <thead>
                       <tr class="text-sm leading-normal">
@@ -207,6 +222,7 @@
                   <div class="text-right mt-4">
                     <a href="/GameStore/admin/transactions">
                       <button
+                        id="seeMore"
                         class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded"
                       >
                         See more

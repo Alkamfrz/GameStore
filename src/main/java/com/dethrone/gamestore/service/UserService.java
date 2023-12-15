@@ -7,6 +7,9 @@ package com.dethrone.gamestore.service;
 import com.dethrone.gamestore.Constants;
 import com.dethrone.gamestore.HibernateUtil;
 import com.dethrone.gamestore.model.User;
+
+import jakarta.servlet.ServletContext;
+
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -154,15 +157,23 @@ public class UserService {
         LOGGER.info("User property changed successfully");
     }
 
+    public boolean isPasswordMatch(String oldPassword, User currentUser) {
+        return securityService.checkPassword(oldPassword, currentUser.getPassword(), currentUser.getSalt());
+    }
+
     public void changePassword(User user, String oldPassword, String newPassword) {
-        if (securityService.checkPassword(oldPassword, user.getPassword(), user.getSalt())) {
-            securityService.changePassword(user, newPassword);
-            updateUser(user);
-            LOGGER.info("Password changed successfully");
-        } else {
-            LOGGER.error("Old password does not match");
-            throw new IllegalArgumentException("Old password does not match");
+        if (!securityService.validatePassword(newPassword)) {
+            throw new IllegalArgumentException("Invalid password");
         }
+        if (!isPasswordMatch(oldPassword, user)) {
+            throw new IllegalArgumentException("Invalid old password");
+        }
+        String salt = securityService.generateSalt();
+        String hashedPassword = securityService.hashPassword(newPassword, salt);
+        changeUserProperty(user, u -> {
+            u.setPassword(hashedPassword);
+            u.setSalt(salt);
+        });
     }
 
     public void changeEmail(User user, String newEmail) {
@@ -204,23 +215,21 @@ public class UserService {
         return getUserByEmail(email).isPresent();
     }
 
-    public void nullifyAllProfilePhotos() {
+    public void nullifyAllProfilePhotos(ServletContext servletContext) {
         executeInTransaction(session -> {
             List<User> users = session.createQuery("from User", User.class).list();
             for (User user : users) {
-                String photosDirectoryPath = Constants.USER_DIRECTORY
-                        + File.separator + user.getUser_id().toString().replace("-", "").substring(0, 10)
-                        + File.separator + Constants.USER_IMAGE_DIRECTORY;
+                String realPath = servletContext.getRealPath("/");
+                String photosDirectoryPath = realPath + Constants.USER_DIRECTORY
+                        + user.getUser_id().toString().replace("-", "").substring(0, 10)
+                        + Constants.USER_IMAGE_DIRECTORY;
 
                 File photosDirectory = new File(photosDirectoryPath);
 
-                if (user.getProfilePhoto() != null) {
-                    File photoFile = new File(photosDirectory, user.getProfilePhoto());
-
-                    if (!photoFile.exists()) {
-                        user.setProfilePhoto(null);
-                        session.merge(user);
-                    }
+                if (!photosDirectory.exists() || user.getProfilePhoto() != null
+                        && !new File(photosDirectory, user.getProfilePhoto()).exists()) {
+                    user.setProfilePhoto(null);
+                    session.merge(user);
                 }
             }
         });

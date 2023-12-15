@@ -16,6 +16,8 @@ public class Constants {
     public static final String USER_ID = "user_id";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
+    public static final String CURRENT_PASSWORD = "currentPassword";
+    public static final String NEW_PASSWORD = "newPassword";
     public static final String CONFIRM_PASSWORD = "confirmPassword";
     public static final String USERNAME_OR_EMAIL = "usernameOrEmail";
     public static final String FIRST_NAME = "firstName";
@@ -81,6 +83,10 @@ public class Constants {
     public static final String USERNAME_TAKEN = "Username is already taken.";
     public static final String PASSWORD_REQUIRED = "Password is required.";
     public static final String PASSWORD_MISMATCH = "Passwords do not match.";
+    public static final String CURRENT_PASSWORD_MISMATCH = "Current password is incorrect.";
+    public static final String CURRENT_PASSWORD_REQUIRED = "Current password is required.";
+    public static final String NEW_PASSWORD_REQUIRED = "New password is required.";
+    public static final String CONFIRM_PASSWORD_REQUIRED = "Confirm password is required.";
     public static final String EMAIL_REQUIRED = "Email is required.";
     public static final String EMAIL_IN_USE = "Email is already in use.";
     public static final String FIRST_NAME_REQUIRED = "First name is required";
@@ -89,6 +95,7 @@ public class Constants {
     // Success messages
     public static final String REGISTRATION_SUCCESS = "You have been successfully registered.";
     public static final String SUCCESS_MESSAGE = "successMessage";
+    public static final String PASSWORD_CHANGED = "Password has been successfully changed.";
 
     // Date format
     public static final String DATE_FORMAT = "dd/MM/yyyy";

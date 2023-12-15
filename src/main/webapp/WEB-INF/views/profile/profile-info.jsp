@@ -1,5 +1,10 @@
 <%@ include file="/WEB-INF/partials/taglibs.jsp" %>
-<form action="/GameStore/profile" method="POST" enctype="multipart/form-data">
+<form
+  id="profileForm"
+  action="/GameStore/profile"
+  method="POST"
+  enctype="multipart/form-data"
+>
   <article
     id="profile-info"
     class="w-full bg-white rounded-lg mx-auto mt-8 flex overflow-hidden rounded-b-none"
@@ -66,7 +71,7 @@
         />
       </div>
       <div class="py-4 px-8 w-full clearfix overflow-hidden">
-        <label for="photo" class="text-sm text-gray-600 w-full block"
+        <label for="photoInput" class="text-sm text-gray-600 w-full block"
           >Portrait</label
         >
         <img class="rounded-full w-16 h-16 border-4 mt-2 border-gray-200
@@ -79,7 +84,7 @@
           class="bg-gray-200 text-gray-500 text-xs mt-5 ml-3 font-bold px-4 py-2 rounded-lg float-left hover:bg-gray-300 hover:text-gray-600 relative overflow-hidden cursor-pointer"
         >
           <input
-            id="photo"
+            id="photoInput"
             type="file"
             name="photo"
             onchange="loadFile(event)"

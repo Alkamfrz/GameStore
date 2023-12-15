@@ -1,5 +1,6 @@
 <%@ include file="/WEB-INF/partials/taglibs.jsp" %>
-<form action="/changepassword" method="post">
+<form id="passwordChangeForm" action="/GameStore/profile" method="post">
+  <input type="text" id="Security" name="username" autocomplete="username" style="display: none;" />
   <article
     id="security"
     class="w-full bg-white rounded-lg mx-auto mt-8 flex overflow-hidden rounded-b-none"
@@ -20,6 +21,7 @@
           class="mt-2 border-2 border-gray-200 px-3 py-2 block w-full rounded-lg text-base text-gray-900 focus:outline-none focus:border-indigo-500"
           type="password"
           name="currentPassword"
+          autocomplete="current-password"
         />
       </div>
       <div class="py-4 px-8 w-full md:w-full">
@@ -31,6 +33,7 @@
           class="mt-2 border-2 border-gray-200 px-3 py-2 block w-full rounded-lg text-base text-gray-900 focus:outline-none focus:border-indigo-500"
           type="password"
           name="newPassword"
+          autocomplete="new-password"
         />
       </div>
       <div class="py-4 px-8 w-full md:w-full">
@@ -42,6 +45,7 @@
           class="mt-2 border-2 border-gray-200 px-3 py-2 block w-full rounded-lg text-base text-gray-900 focus:outline-none focus:border-indigo-500"
           type="password"
           name="confirmPassword"
+          autocomplete="new-password"
         />
       </div>
     </div>

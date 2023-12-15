@@ -39,9 +39,13 @@ const makeAjaxRequest = async (type, url, data) => {
 };
 
 const deleteUser = async (user_id) => {
-  const response = await makeAjaxRequest("POST", `/GameStore/admin/users/delete`, { user_id: user_id });
+  const response = await makeAjaxRequest(
+    "POST",
+    `/GameStore/admin/users/delete`,
+    { user_id: user_id }
+  );
   if (response.status === "success") {
-    sessionStorage.setItem('userOperation', 'User deleted successfully');
+    sessionStorage.setItem("userOperation", "User deleted successfully");
     location.reload();
   } else {
     console.error("Failed to delete user");
@@ -50,7 +54,18 @@ const deleteUser = async (user_id) => {
 
 const openEditModal = async (user_id) => {
   try {
-    const response = await makeAjaxRequest("GET", `/GameStore/admin/users/${user_id}`);
+    const response = await makeAjaxRequest(
+      "GET",
+      `/GameStore/admin/users/${user_id}`
+    );
+
+    const originalFormData = {
+      firstName: response.firstName,
+      lastName: response.lastName,
+      username: response.username,
+      email: response.email,
+      role: response.role,
+    };
 
     var formHtml = `
       <div>
@@ -100,6 +115,17 @@ const openEditModal = async (user_id) => {
           return false;
         }
 
+        const currentFormData = { firstName, lastName, username, email, role };
+        if (
+          JSON.stringify(originalFormData) === JSON.stringify(currentFormData)
+        ) {
+          Swal.fire({
+            icon: "info",
+            title: "No changes detected",
+          });
+          return false;
+        }
+
         return {
           user_id: user_id,
           firstName: firstName,
@@ -120,9 +146,13 @@ const openEditModal = async (user_id) => {
       },
     }).then(async function (result) {
       if (result.isConfirmed) {
-        const response = await makeAjaxRequest("POST", "/GameStore/admin/users/edit", result.value);
+        const response = await makeAjaxRequest(
+          "POST",
+          "/GameStore/admin/users/edit",
+          result.value
+        );
         if (response.status === "success") {
-          sessionStorage.setItem('userOperation', 'User updated successfully');
+          sessionStorage.setItem("userOperation", "User updated successfully");
           location.reload();
         } else {
           console.error("Failed to update user");
@@ -151,15 +181,15 @@ const openEditModal = async (user_id) => {
 $(document).ready(() => {
   setupDropdownAnimation();
 
-  const userOperation = sessionStorage.getItem('userOperation');
+  const userOperation = sessionStorage.getItem("userOperation");
   if (userOperation) {
     Swal.fire({
-      icon: 'success',
+      icon: "success",
       title: userOperation,
       showConfirmButton: true,
-      confirmButtonText: 'OK',
-      timer: 1500
+      confirmButtonText: "OK",
+      timer: 1500,
     });
-    sessionStorage.removeItem('userOperation');
+    sessionStorage.removeItem("userOperation");
   }
 });

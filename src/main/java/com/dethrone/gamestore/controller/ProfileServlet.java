@@ -106,9 +106,99 @@ public class ProfileServlet extends HttpServlet {
         if (session == null || session.getAttribute(Constants.USER_SESSION_ATTRIBUTE) == null) {
             response.sendRedirect(request.getContextPath() + Constants.LOGIN_URL);
         } else {
-            User currentUser = (User) session.getAttribute(Constants.USER_SESSION_ATTRIBUTE);
-            String pathInfo = request.getPathInfo();
-            if (pathInfo != null && pathInfo.equals("/deletephoto")) {
+            String action = request.getParameter("action");
+            if ("changePassword".equals(action)) {
+                handleChangePassword(request, response, session);
+            } else if ("updateProfile".equals(action)) {
+                handleUpdateProfile(request, response, session);
+            }
+        }
+    }
+
+    private void handleChangePassword(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+            throws ServletException, IOException {
+        User currentUser = (User) session.getAttribute(Constants.USER_SESSION_ATTRIBUTE);
+
+        String oldPassword = Optional.ofNullable(request.getParameter(Constants.CURRENT_PASSWORD))
+                .orElseThrow(() -> new ServletException(Constants.CURRENT_PASSWORD_REQUIRED));
+        String newPassword = Optional.ofNullable(request.getParameter(Constants.NEW_PASSWORD))
+                .orElseThrow(() -> new ServletException(Constants.NEW_PASSWORD_REQUIRED));
+        String confirmNewPassword = Optional.ofNullable(request.getParameter(Constants.CONFIRM_PASSWORD))
+                .orElseThrow(() -> new ServletException(Constants.CONFIRM_PASSWORD_REQUIRED));
+
+        List<String> errorMessage = validatePasswordChange(oldPassword, newPassword, confirmNewPassword, currentUser);
+        if (!errorMessage.isEmpty()) {
+            request.setAttribute(Constants.ERROR_MESSAGE, errorMessage);
+            request.getRequestDispatcher(Constants.PROFILE_VIEW).forward(request, response);
+        } else {
+            try {
+                userService.changePassword(currentUser, oldPassword, newPassword);
+                session.setAttribute(Constants.USER_SESSION_ATTRIBUTE, currentUser);
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"status\": \"success\"}");
+            } catch (IllegalArgumentException e) {
+                errorMessage.add(e.getMessage());
+                request.setAttribute(Constants.ERROR_MESSAGE, errorMessage);
+                request.getRequestDispatcher(Constants.PROFILE_VIEW).forward(request, response);
+            }
+        }
+    }
+
+    private List<String> validatePasswordChange(String oldPassword, String newPassword, String confirmNewPassword,
+            User currentUser) {
+        List<String> errorMessages = new ArrayList<>();
+        if (!userService.isPasswordMatch(oldPassword, currentUser)) {
+            errorMessages.add(Constants.CURRENT_PASSWORD_MISMATCH);
+        }
+        if (StringUtils.isBlank(newPassword)) {
+            errorMessages.add(Constants.NEW_PASSWORD_REQUIRED);
+        }
+        if (!newPassword.equals(confirmNewPassword)) {
+            errorMessages.add(Constants.PASSWORD_MISMATCH);
+        }
+        return errorMessages;
+    }
+
+    private void handleUpdateProfile(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+            throws ServletException, IOException {
+        User currentUser = (User) session.getAttribute(Constants.USER_SESSION_ATTRIBUTE);
+
+        String firstName = Optional.ofNullable(request.getParameter(Constants.FIRST_NAME))
+                .orElseThrow(() -> new ServletException(Constants.FIRST_NAME_REQUIRED));
+        String lastName = Optional.ofNullable(request.getParameter(Constants.LAST_NAME))
+                .orElseThrow(() -> new ServletException(Constants.LAST_NAME_REQUIRED));
+
+        List<String> errorMessage = validateFormData(firstName, lastName);
+        if (!errorMessage.isEmpty()) {
+            request.setAttribute(Constants.ERROR_MESSAGE, errorMessage);
+            request.getRequestDispatcher(Constants.PROFILE_VIEW).forward(request, response);
+        } else {
+            currentUser.setFirstName(firstName);
+            currentUser.setLastName(lastName);
+
+            Part profilePhotoPart = request.getPart(Constants.PHOTO);
+            if (profilePhotoPart != null && profilePhotoPart.getSize() > 0) {
+                String fileName = UUID.randomUUID().toString() + "." +
+                        com.google.common.io.Files.getFileExtension(profilePhotoPart.getSubmittedFileName());
+                try (InputStream fileContent = profilePhotoPart.getInputStream()) {
+                    String userDirectoryPath = getServletContext().getRealPath(Constants.USER_DIRECTORY)
+                            + currentUser.getUser_id().toString().replace("-", "").substring(0, 10)
+                            + Constants.USER_IMAGE_DIRECTORY;
+                    Path userDirectory = Paths.get(userDirectoryPath);
+                    Files.createDirectories(userDirectory);
+
+                    if (currentUser.getProfilePhoto() != null) {
+                        Path oldPhotoPath = userDirectory.resolve(currentUser.getProfilePhoto());
+                        Files.deleteIfExists(oldPhotoPath);
+                    }
+
+                    Files.copy(fileContent, userDirectory.resolve(fileName),
+                            StandardCopyOption.REPLACE_EXISTING);
+                    currentUser.setProfilePhoto(fileName);
+                }
+            } else if (request.getParameter("deletePhoto") != null) {
                 String userDirectoryPath = getServletContext().getRealPath(Constants.USER_DIRECTORY)
                         + currentUser.getUser_id().toString().replace("-", "").substring(0, 10) + "/images/";
                 Path userDirectory = Paths.get(userDirectoryPath);
@@ -117,59 +207,15 @@ public class ProfileServlet extends HttpServlet {
                     Path oldPhotoPath = userDirectory.resolve(currentUser.getProfilePhoto());
                     Files.deleteIfExists(oldPhotoPath);
                     currentUser.setProfilePhoto(null);
-                    userService.updateUser(currentUser);
-                    session.setAttribute(Constants.USER_SESSION_ATTRIBUTE, currentUser);
-
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write("{\"status\": \"success\"}");
-                } else {
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write("{\"status\": \"failure\"}");
-                }
-            } else {
-                String firstName = Optional.ofNullable(request.getParameter(Constants.FIRST_NAME))
-                        .orElseThrow(() -> new ServletException(Constants.FIRST_NAME_REQUIRED));
-                String lastName = Optional.ofNullable(request.getParameter(Constants.LAST_NAME))
-                        .orElseThrow(() -> new ServletException(Constants.LAST_NAME_REQUIRED));
-
-                List<String> errorMessage = validateFormData(firstName, lastName);
-                if (!errorMessage.isEmpty()) {
-                    request.setAttribute(Constants.ERROR_MESSAGE, errorMessage);
-                    request.getRequestDispatcher(Constants.PROFILE_VIEW).forward(request, response);
-                } else {
-                    currentUser.setFirstName(firstName);
-                    currentUser.setLastName(lastName);
-
-                    Part profilePhotoPart = request.getPart(Constants.PHOTO);
-                    if (profilePhotoPart != null && profilePhotoPart.getSize() > 0) {
-                        String fileName = UUID.randomUUID().toString() + "." +
-                                com.google.common.io.Files.getFileExtension(profilePhotoPart.getSubmittedFileName());
-                        try (InputStream fileContent = profilePhotoPart.getInputStream()) {
-                            String userDirectoryPath = getServletContext().getRealPath(Constants.USER_DIRECTORY)
-                                    + currentUser.getUser_id().toString().replace("-", "").substring(0, 10)
-                                    + Constants.USER_IMAGE_DIRECTORY;
-                            Path userDirectory = Paths.get(userDirectoryPath);
-                            Files.createDirectories(userDirectory);
-
-                            if (currentUser.getProfilePhoto() != null) {
-                                Path oldPhotoPath = userDirectory.resolve(currentUser.getProfilePhoto());
-                                Files.deleteIfExists(oldPhotoPath);
-                            }
-
-                            Files.copy(fileContent, userDirectory.resolve(fileName),
-                                    StandardCopyOption.REPLACE_EXISTING);
-                            currentUser.setProfilePhoto(fileName);
-                        }
-                    }
-
-                    userService.updateUser(currentUser);
-                    session.setAttribute(Constants.USER_SESSION_ATTRIBUTE, currentUser);
-
-                    response.sendRedirect(request.getContextPath() + Constants.PROFILE);
                 }
             }
+
+            userService.updateUser(currentUser);
+            session.setAttribute(Constants.USER_SESSION_ATTRIBUTE, currentUser);
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"status\": \"success\"}");
         }
     }
 
