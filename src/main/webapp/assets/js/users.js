@@ -1,28 +1,28 @@
 const getAnimationSettings = (isHidden, dropdownMenu) => ({
-  targets: dropdownMenu[0],
+  targets: dropdownMenu,
   translateY: isHidden ? [-70, 0] : [0, -70],
   opacity: isHidden ? [0, 1] : [1, 0],
   scale: isHidden ? [0.9, 1] : [1, 0.9],
   duration: 700,
   easing: isHidden ? "easeOutExpo" : "easeInExpo",
-  begin: isHidden ? () => dropdownMenu.show() : undefined,
-  complete: isHidden ? undefined : () => dropdownMenu.hide(),
+  begin: isHidden ? () => (dropdownMenu.style.display = "block") : undefined,
+  complete: isHidden ? undefined : () => (dropdownMenu.style.display = "none"),
   delay: anime.stagger(100),
 });
 
 const setupDropdownAnimation = () => {
-  const dropdown = $(".dropdown");
-  const dropdownMenu = dropdown.children(".dropdown-menu");
+  const dropdown = document.querySelector(".dropdown");
+  const dropdownMenu = dropdown.querySelector(".dropdown-menu");
 
-  dropdown.click((event) => {
+  dropdown.addEventListener("click", (event) => {
     event.stopPropagation();
-    const isHidden = dropdownMenu.is(":hidden");
+    const isHidden = dropdownMenu.style.display === "none";
     const animationSettings = getAnimationSettings(isHidden, dropdownMenu);
     anime(animationSettings);
   });
 
-  $(document).click(() => {
-    if (!dropdownMenu.is(":hidden")) {
+  document.addEventListener("click", () => {
+    if (dropdownMenu.style.display !== "none") {
       const animationSettings = getAnimationSettings(false, dropdownMenu);
       anime(animationSettings);
     }
@@ -31,8 +31,14 @@ const setupDropdownAnimation = () => {
 
 const makeAjaxRequest = async (type, url, data) => {
   try {
-    const response = await $.ajax({ type, url, data });
-    return response;
+    const response = await fetch(url, {
+      method: type,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return response.json();
   } catch (error) {
     console.error("Error:", error);
   }
@@ -178,7 +184,7 @@ const openEditModal = async (user_id) => {
   }
 };
 
-$(document).ready(() => {
+document.addEventListener("DOMContentLoaded", () => {
   setupDropdownAnimation();
 
   const userOperation = sessionStorage.getItem("userOperation");

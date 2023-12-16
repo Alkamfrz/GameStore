@@ -61,17 +61,22 @@
                         <th
                           class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light"
                         >
+                          Username
+                        </th>
+                        <th
+                          class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light"
+                        >
                           Last Edited
                         </th>
                         <th
                           class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light"
                         >
-                          Created At
+                          Last Login
                         </th>
                         <th
                           class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light"
                         >
-                          Last Login
+                          Email
                         </th>
                         <th
                           class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light"
@@ -95,13 +100,16 @@
                             ${user.firstName} ${user.lastName}
                           </td>
                           <td class="py-2 px-4 border-b border-grey-light">
+                            ${user.username}
+                          </td>
+                          <td class="py-2 px-4 border-b border-grey-light">
                             ${user.updatedAt}
                           </td>
                           <td class="py-2 px-4 border-b border-grey-light">
-                            ${user.createdAt}
+                            ${user.lastLogin}
                           </td>
                           <td class="py-2 px-4 border-b border-grey-light">
-                            ${user.lastLogin}
+                            ${user.email}
                           </td>
                           <td class="py-2 px-4 border-b border-grey-light">
                             ${user.role.name()}

@@ -1,4 +1,4 @@
-$(document).ready(() => {
+document.addEventListener('DOMContentLoaded', () => {
   setupDropdownAnimation();
   setupCharts();
   setupMenuButton();
@@ -6,47 +6,52 @@ $(document).ready(() => {
 });
 
 const setupSearchFilter = () => {
-  $("#searchInput").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
-    var hasVisibleRows = false;
+  const searchInput = document.querySelector("#searchInput");
 
-    $("table").each(function () {
-      $(this)
-        .find("tbody tr")
-        .filter(function () {
-          var isVisible = $(this).text().toLowerCase().indexOf(value) > -1;
-          $(this).toggle(isVisible);
-          if (isVisible) {
-            hasVisibleRows = true;
-          }
-        });
+  searchInput.addEventListener("keyup", function () {
+    const value = this.value.toLowerCase();
+    let hasVisibleRows = false;
+
+    const tables = document.querySelectorAll("table");
+    tables.forEach((table) => {
+      const rows = table.querySelectorAll("tbody tr");
+      rows.forEach((row) => {
+        const isVisible = row.textContent.toLowerCase().includes(value);
+        row.style.display = isVisible ? "" : "none";
+        if (isVisible) {
+          hasVisibleRows = true;
+        }
+      });
     });
 
+    const noDataMessage = document.querySelector("#noDataMessage");
+    const seeMore = document.querySelector("#seeMore");
+
     if (hasVisibleRows) {
-      $("table").show();
-      $("#noDataMessage").hide();
-      $("#seeMore").show();
+      tables.forEach((table) => table.style.display = "");
+      noDataMessage.style.display = "none";
+      seeMore.style.display = "";
     } else {
-      $("table").hide();
-      $("#noDataMessage").show();
-      $("#seeMore").hide();
+      tables.forEach((table) => table.style.display = "none");
+      noDataMessage.style.display = "";
+      seeMore.style.display = "none";
     }
   });
 };
 
 const setupDropdownAnimation = () => {
-  const dropdown = $(".dropdown");
-  const dropdownMenu = dropdown.children(".dropdown-menu");
+  const dropdown = document.querySelector(".dropdown");
+  const dropdownMenu = dropdown.querySelector(".dropdown-menu");
 
-  dropdown.click((event) => {
+  dropdown.addEventListener('click', (event) => {
     event.stopPropagation();
-    const isHidden = dropdownMenu.is(":hidden");
+    const isHidden = dropdownMenu.style.display === 'none';
     const animationSettings = getAnimationSettings(isHidden, dropdownMenu);
     anime(animationSettings);
   });
 
-  $(document).click(() => {
-    if (!dropdownMenu.is(":hidden")) {
+  document.addEventListener('click', () => {
+    if (dropdownMenu.style.display !== 'none') {
       const animationSettings = getAnimationSettings(false, dropdownMenu);
       anime(animationSettings);
     }
@@ -54,20 +59,20 @@ const setupDropdownAnimation = () => {
 };
 
 const getAnimationSettings = (isHidden, dropdownMenu) => ({
-  targets: dropdownMenu[0],
+  targets: dropdownMenu,
   translateY: isHidden ? [-70, 0] : [0, -70],
   opacity: isHidden ? [0, 1] : [1, 0],
   scale: isHidden ? [0.9, 1] : [1, 0.9],
   duration: 700,
   easing: isHidden ? "easeOutExpo" : "easeInExpo",
-  begin: isHidden ? () => dropdownMenu.show() : undefined,
-  complete: isHidden ? undefined : () => dropdownMenu.hide(),
+  begin: isHidden ? () => dropdownMenu.style.display = 'block' : undefined,
+  complete: isHidden ? undefined : () => dropdownMenu.style.display = 'none',
   delay: anime.stagger(100),
 });
 
 const setupCharts = () => {
-  const totalUsers = $(".chart-container").data("total-users");
-  const newUsersThisMonth = $(".chart-container").data("new-users");
+  const totalUsers = document.querySelector(".chart-container").dataset.totalUsers;
+  const newUsersThisMonth = document.querySelector(".chart-container").dataset.newUsers;
   createChart(
     "usersChart",
     ["New (This Month)", "Registered"],
@@ -83,7 +88,7 @@ const setupCharts = () => {
 };
 
 const createChart = (elementId, labels, data, backgroundColors) => {
-  new Chart($(`#${elementId}`), {
+  new Chart(document.getElementById(elementId), {
     type: "doughnut",
     data: {
       labels: labels,
@@ -105,19 +110,21 @@ const createChart = (elementId, labels, data, backgroundColors) => {
 };
 
 const setupMenuButton = () => {
-  $("#menuBtn").on("click", () => {
-    const sideNav = $("#sideNav");
-    const isHidden = sideNav.hasClass("hidden");
+  const menuBtn = document.querySelector("#menuBtn");
+  const sideNav = document.querySelector("#sideNav");
+
+  menuBtn.addEventListener('click', () => {
+    const isHidden = sideNav.classList.contains("hidden");
     const animationSettings = getMenuAnimationSettings(isHidden);
     anime(animationSettings);
 
     if (isHidden) {
-      sideNav.animate({ width: "toggle" }, 350);
+      sideNav.style.width = '0';
     } else {
-      sideNav.animate({ width: "toggle" }, 350);
+      sideNav.style.width = 'auto';
     }
 
-    sideNav.toggleClass("hidden");
+    sideNav.classList.toggle("hidden");
   });
 };
 
@@ -127,7 +134,7 @@ const getMenuAnimationSettings = (isHidden) => ({
   scale: isHidden ? [1, 1.2] : [1.2, 1],
   duration: 500,
   easing: "easeInOutQuad",
-  begin: isHidden ? () => $("#menuBtn").addClass("open") : undefined,
-  complete: isHidden ? undefined : () => $("#menuBtn").removeClass("open"),
+  begin: isHidden ? () => document.querySelector("#menuBtn").classList.add("open") : undefined,
+  complete: isHidden ? undefined : () => document.querySelector("#menuBtn").classList.remove("open"),
   delay: isHidden ? 0 : 500,
 });

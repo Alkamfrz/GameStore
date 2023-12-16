@@ -4,14 +4,19 @@
  */
 package com.dethrone.gamestore.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 import com.dethrone.gamestore.Constants;
 import com.dethrone.gamestore.model.User;
 import com.dethrone.gamestore.service.UserService;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
@@ -76,13 +81,23 @@ public class UserServlet extends HttpServlet {
                         User user = userOpt.get();
                         response.setContentType("application/json");
                         response.setCharacterEncoding("UTF-8");
-                        response.getWriter().write("{\"firstName\": \"" + user.getFirstName() + "\", \"lastName\": \""
-                                + user.getLastName() + "\", \"username\": \"" + user.getUsername() + "\", \"email\": \""
-                                + user.getEmail() + "\", \"role\": \"" + user.getRole() + "\"}");
+
+                        JsonObject userJson = new JsonObject();
+                        userJson.addProperty("firstName", user.getFirstName());
+                        userJson.addProperty("lastName", user.getLastName());
+                        userJson.addProperty("username", user.getUsername());
+                        userJson.addProperty("email", user.getEmail());
+                        userJson.addProperty("role", user.getRole().toString());
+
+                        response.getWriter().write(userJson.toString());
                     } else {
                         response.setContentType("application/json");
                         response.setCharacterEncoding("UTF-8");
-                        response.getWriter().write("{\"status\": \"failure\"}");
+
+                        JsonObject errorJson = new JsonObject();
+                        errorJson.addProperty("status", "failure");
+
+                        response.getWriter().write(errorJson.toString());
                     }
                 } else {
                     setUserAttributes(request, currentUser);
@@ -114,21 +129,31 @@ public class UserServlet extends HttpServlet {
             if (currentUser.getRole().equals(User.Role.ADMIN)) {
                 String pathInfo = request.getPathInfo();
                 if (pathInfo != null && (pathInfo.equals("/edit") || pathInfo.equals("/delete"))) {
-                    String userIdStr = request.getParameter("user_id");
+                    BufferedReader reader = request.getReader();
+                    Gson gson = new Gson();
+                    Map<String, Object> data = gson.fromJson(reader, new TypeToken<Map<String, Object>>() {
+                    }.getType());
+
+                    String userIdStr = (String) data.get("user_id");
                     if (userIdStr == null) {
                         response.setContentType("application/json");
                         response.setCharacterEncoding("UTF-8");
-                        response.getWriter().write("{\"status\": \"failure\", \"message\": \"User ID is missing\"}");
+
+                        JsonObject errorJson = new JsonObject();
+                        errorJson.addProperty("status", "failure");
+                        errorJson.addProperty("message", "User ID is missing");
+
+                        response.getWriter().write(errorJson.toString());
                         return;
                     }
                     UUID userId = UUID.fromString(userIdStr);
                     try {
                         if (pathInfo.equals("/edit")) {
-                            String newFirstName = request.getParameter("firstName");
-                            String newLastName = request.getParameter("lastName");
-                            String newUsername = request.getParameter("username");
-                            String newEmail = request.getParameter("email");
-                            String newRole = request.getParameter("role");
+                            String newFirstName = (String) data.get("firstName");
+                            String newLastName = (String) data.get("lastName");
+                            String newUsername = (String) data.get("username");
+                            String newEmail = (String) data.get("email");
+                            String newRole = (String) data.get("role");
 
                             Optional<User> userToEditOpt = userService.getUserById(userId);
                             if (userToEditOpt.isPresent()) {
@@ -144,12 +169,20 @@ public class UserServlet extends HttpServlet {
 
                                 response.setContentType("application/json");
                                 response.setCharacterEncoding("UTF-8");
-                                response.getWriter().write("{\"status\": \"success\"}");
+
+                                JsonObject successJson = new JsonObject();
+                                successJson.addProperty("status", "success");
+
+                                response.getWriter().write(successJson.toString());
                             } else {
                                 response.setContentType("application/json");
                                 response.setCharacterEncoding("UTF-8");
-                                response.getWriter()
-                                        .write("{\"status\": \"failure\", \"message\": \"User not found\"}");
+
+                                JsonObject errorJson = new JsonObject();
+                                errorJson.addProperty("status", "failure");
+                                errorJson.addProperty("message", "User not found");
+
+                                response.getWriter().write(errorJson.toString());
                             }
                         } else if (pathInfo.equals("/delete")) {
                             Optional<User> userToDeleteOpt = userService.getUserById(userId);
@@ -157,22 +190,35 @@ public class UserServlet extends HttpServlet {
                                 User userToDelete = userToDeleteOpt.get();
 
                                 userService.deleteUser(userToDelete);
+
                                 response.setContentType("application/json");
                                 response.setCharacterEncoding("UTF-8");
-                                response.getWriter().write("{\"status\": \"success\"}");
+
+                                JsonObject successJson = new JsonObject();
+                                successJson.addProperty("status", "success");
+
+                                response.getWriter().write(successJson.toString());
                             } else {
                                 response.setContentType("application/json");
                                 response.setCharacterEncoding("UTF-8");
-                                response.getWriter()
-                                        .write("{\"status\": \"failure\", \"message\": \"User not found\"}");
+
+                                JsonObject errorJson = new JsonObject();
+                                errorJson.addProperty("status", "failure");
+                                errorJson.addProperty("message", "User not found");
+
+                                response.getWriter().write(errorJson.toString());
                             }
                         }
                     } catch (Exception e) {
                         LOGGER.error(Constants.DATABASE_ERROR, e);
                         response.setContentType("application/json");
                         response.setCharacterEncoding("UTF-8");
-                        response.getWriter().write(
-                                "{\"status\": \"failure\", \"message\": \"Database error: " + e.getMessage() + "\"}");
+
+                        JsonObject errorJson = new JsonObject();
+                        errorJson.addProperty("status", "failure");
+                        errorJson.addProperty("message", "Database error: " + e.getMessage());
+
+                        response.getWriter().write(errorJson.toString());
                     }
                 }
             } else {
