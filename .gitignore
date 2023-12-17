@@ -1,2 +1,3 @@
 /src/main/webapp/assets/img/users/*
 !/src/main/webapp/assets/img/users/default.png
+/target/
