@@ -45,7 +45,7 @@
                   </div>
                 </c:when>
                 <c:otherwise>
-                  <table class="w-full table-auto text-sm">
+                  <table id="userTable" class="w-full table-auto text-sm">
                     <thead>
                       <tr class="text-sm leading-normal">
                         <th

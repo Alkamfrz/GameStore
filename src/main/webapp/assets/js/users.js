@@ -211,4 +211,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     sessionStorage.removeItem("userOperation");
   }
+  $(document).ready(function() {
+    var table = $('#userTable').DataTable({
+      "pagingType": "full_numbers",
+      "order": [[ 1, "desc" ]],
+      "language": {
+        "emptyTable": "No users found"
+      },
+      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+      "columnDefs": [
+        { "orderable": false, "targets": [4, 5] }
+      ]
+    });
+
+    $('#searchInput').on('keyup', function() {
+      table.search(this.value).draw();
+    });
+  });
 });
