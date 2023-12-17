@@ -7,6 +7,9 @@ package com.dethrone.gamestore.controller;
 import com.dethrone.gamestore.Constants;
 import com.dethrone.gamestore.model.User;
 import com.dethrone.gamestore.service.UserService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -55,6 +58,15 @@ public class ProfileServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException      if an I/O error occurs
      */
+
+    private void writeResponse(HttpServletResponse response, Object object) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(object);
+        response.getWriter().write(json);
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -135,9 +147,9 @@ public class ProfileServlet extends HttpServlet {
                 userService.changePassword(currentUser, oldPassword, newPassword);
                 session.setAttribute(Constants.USER_SESSION_ATTRIBUTE, currentUser);
 
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("{\"status\": \"success\"}");
+                Map<String, String> result = new HashMap<>();
+                result.put("status", "success");
+                writeResponse(response, result);
             } catch (IllegalArgumentException e) {
                 errorMessage.add(e.getMessage());
                 request.setAttribute(Constants.ERROR_MESSAGE, errorMessage);
@@ -213,9 +225,9 @@ public class ProfileServlet extends HttpServlet {
             userService.updateUser(currentUser);
             session.setAttribute(Constants.USER_SESSION_ATTRIBUTE, currentUser);
 
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"status\": \"success\"}");
+            Map<String, String> result = new HashMap<>();
+            result.put("status", "success");
+            writeResponse(response, result);
         }
     }
 

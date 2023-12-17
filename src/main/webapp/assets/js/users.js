@@ -53,6 +53,14 @@ const deleteUser = async (user_id) => {
   if (response.status === "success") {
     sessionStorage.setItem("userOperation", "User deleted successfully");
     location.reload();
+  } else if (
+    response.status === "failure" &&
+    response.message === "You cannot delete yourself"
+  ) {
+    Swal.fire({
+      icon: "error",
+      title: "You cannot delete yourself",
+    });
   } else {
     console.error("Failed to delete user");
   }
@@ -142,6 +150,9 @@ const openEditModal = async (user_id) => {
         };
       },
       didOpen: function () {
+        if (response.currentUserId === user_id) {
+          Swal.getCancelButton().style.display = "none";
+        }
         var roleSelect = document.getElementById("role");
         for (var i = 0; i < roleSelect.options.length; i++) {
           if (roleSelect.options[i].value === response.role) {
@@ -164,19 +175,21 @@ const openEditModal = async (user_id) => {
           console.error("Failed to update user");
         }
       } else if (result.dismiss === "cancel") {
-        Swal.fire({
-          title: "Are you sure?",
-          html: `You are about to delete the user with the following details:<br><br><b>Full Name:</b> ${response.firstName} ${response.lastName}<br><b>Username:</b> ${response.username}<br><b>Email:</b> ${response.email}<br><br>You won't be able to revert this!`,
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete it!",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            deleteUser(user_id);
-          }
-        });
+        if (response.currentUserId !== user_id) {
+          Swal.fire({
+            title: "Are you sure?",
+            html: `You are about to delete the user with the following details:<br><br><b>Full Name:</b> ${response.firstName} ${response.lastName}<br><b>Username:</b> ${response.username}<br><b>Email:</b> ${response.email}<br><br>You won't be able to revert this!`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              deleteUser(user_id);
+            }
+          });
+        }
       }
     });
   } catch (error) {

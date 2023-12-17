@@ -88,6 +88,8 @@ public class UserServlet extends HttpServlet {
                         userJson.addProperty("username", user.getUsername());
                         userJson.addProperty("email", user.getEmail());
                         userJson.addProperty("role", user.getRole().toString());
+                        userJson.addProperty("currentUserId", currentUser.getUser_id().toString());
+
 
                         response.getWriter().write(userJson.toString());
                     } else {
@@ -147,6 +149,17 @@ public class UserServlet extends HttpServlet {
                         return;
                     }
                     UUID userId = UUID.fromString(userIdStr);
+                    if (pathInfo.equals("/delete") && currentUser.getUser_id().equals(userId)) {
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+    
+                        JsonObject errorJson = new JsonObject();
+                        errorJson.addProperty("status", "failure");
+                        errorJson.addProperty("message", "You cannot delete yourself");
+    
+                        response.getWriter().write(errorJson.toString());
+                        return;
+                    }
                     try {
                         if (pathInfo.equals("/edit")) {
                             String newFirstName = (String) data.get("firstName");
