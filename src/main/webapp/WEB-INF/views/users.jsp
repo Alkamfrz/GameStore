@@ -31,13 +31,23 @@
 
           <div class="mt-2 p-2">
             <div class="bg-white p-4 rounded-md">
-              <h2 class="text-gray-500 text-lg font-semibold pb-1">
-                User List
-              </h2>
+              <div class="flex justify-between items-center">
+                <h2 class="text-gray-500 text-lg font-semibold pb-1">
+                  User List
+                </h2>
+                <button
+                  class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded mb-2"
+                  onclick="openAddUserModal()"
+                >
+                  <i class="fas fa-plus"></i>
+                  Add User
+                </button>
+              </div>
               <div class="my1-"></div>
               <div
                 class="bg-gradient-to-r from-indigo-300 to-indigo-500 h-px mb-6"
               ></div>
+              <!-- Rest of your code -->
               <c:choose>
                 <c:when test="${empty users}">
                   <div class="flex justify-center items-center">

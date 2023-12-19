@@ -68,7 +68,9 @@ public class UserService {
             user.setPassword(hashedPassword);
             user.setSalt(salt);
         }
-        user.setRole(User.Role.CUSTOMER);
+        if (user.getRole() == null) {
+            user.setRole(User.Role.CUSTOMER);
+        }
         user.setCreatedAt(LocalDateTime.now());
         executeInTransaction(session -> session.persist(user));
         return user;

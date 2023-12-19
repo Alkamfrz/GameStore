@@ -66,6 +66,86 @@ const deleteUser = async (user_id) => {
   }
 };
 
+const openAddUserModal = () => {
+  var formHtml = `
+    <div>
+      <label for="firstName" class="swal2-label">First Name</label>
+      <input id="firstName" class="swal2-input" placeholder="First Name">
+    </div>
+
+    <div>
+      <label for="lastName" class="swal2-label">Last Name</label>
+      <input id="lastName" class="swal2-input" placeholder="Last Name">
+    </div>
+
+    <div>
+      <label for="username" class="swal2-label">Username</label>
+      <input id="username" class="swal2-input" placeholder="Username">
+    </div>
+
+    <div>
+      <label for="password" class="swal2-label">Password</label>
+      <input id="password" type="password" class="swal2-input" placeholder="Password">
+    </div>
+
+    <div>
+      <label for="email" class="swal2-label">Email</label>
+      <input id="email" class="swal2-input" placeholder="Email">
+    </div>
+
+    <div>
+      <label for="role" class="swal2-label">Role</label>
+      <select id="role" class="swal2-input">
+        <option value="ADMIN">Admin</option>
+        <option value="CUSTOMER"selected>Customer</option>
+      </select>
+    </div>
+  `;
+
+  Swal.fire({
+    title: "Add User",
+    html: formHtml,
+    confirmButtonText: "Add",
+    showCancelButton: true,
+    preConfirm: function () {
+      var firstName = document.getElementById("firstName").value;
+      var lastName = document.getElementById("lastName").value;
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+      var email = document.getElementById("email").value;
+      var role = document.getElementById("role").value;
+
+      if (!firstName || !lastName || !username || !password || !email || !role) {
+        Swal.showValidationMessage("All fields are required");
+        return false;
+      }
+
+      return {
+        firstName: firstName,
+        lastName: lastName,
+        username: username,
+        password: password,
+        email: email,
+        role: role,
+      };
+    },
+  }).then(async function (result) {
+    if (result.isConfirmed) {
+      const response = await makeAjaxRequest(
+        "POST",
+        "/GameStore/admin/users/add",
+        result.value
+      );
+      if (response.status === "success") {
+        sessionStorage.setItem("userOperation", "User added successfully");
+        location.reload();
+      } else {
+        console.error("Failed to add user");
+      }
+    }
+  });
+};
+
 const openEditModal = async (user_id) => {
   try {
     const response = await makeAjaxRequest(

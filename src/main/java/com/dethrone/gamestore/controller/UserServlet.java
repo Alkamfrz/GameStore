@@ -6,6 +6,7 @@ package com.dethrone.gamestore.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -90,7 +91,6 @@ public class UserServlet extends HttpServlet {
                         userJson.addProperty("role", user.getRole().toString());
                         userJson.addProperty("currentUserId", currentUser.getUser_id().toString());
 
-
                         response.getWriter().write(userJson.toString());
                     } else {
                         response.setContentType("application/json");
@@ -130,6 +130,51 @@ public class UserServlet extends HttpServlet {
             User currentUser = (User) session.getAttribute("user");
             if (currentUser.getRole().equals(User.Role.ADMIN)) {
                 String pathInfo = request.getPathInfo();
+                if (pathInfo != null && pathInfo.equals("/add")) {
+                    BufferedReader reader = request.getReader();
+                    Gson gson = new Gson();
+                    Map<String, Object> data = gson.fromJson(reader, new TypeToken<Map<String, Object>>() {
+                    }.getType());
+
+                    String username = (String) data.get(Constants.USERNAME);
+                    String firstName = (String) data.get(Constants.FIRST_NAME);
+                    String lastName = (String) data.get(Constants.LAST_NAME);
+                    String password = (String) data.get(Constants.PASSWORD);
+                    String email = (String) data.get(Constants.EMAIL);
+                    String role = (String) data.get(Constants.ROLE);
+
+                    List<String> errorMessage = validateFormData(username, firstName, lastName, password, email);
+
+                    if (errorMessage != null && !errorMessage.isEmpty()) {
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+
+                        JsonObject errorJson = new JsonObject();
+                        errorJson.addProperty("status", "failure");
+                        errorJson.addProperty("message", String.join(", ", errorMessage));
+
+                        response.getWriter().write(errorJson.toString());
+                    } else {
+                        User user = new User();
+                        user.setUsername(username);
+                        user.setPassword(password);
+                        user.setEmail(email);
+                        user.setFirstName(firstName);
+                        user.setLastName(lastName);
+                        user.setRole(User.Role.valueOf(role.toUpperCase()));
+
+                        userService.registerUser(user);
+
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+
+                        JsonObject successJson = new JsonObject();
+                        successJson.addProperty("status", "success");
+                        successJson.addProperty("message", Constants.REGISTRATION_SUCCESS);
+
+                        response.getWriter().write(successJson.toString());
+                    }
+                }
                 if (pathInfo != null && (pathInfo.equals("/edit") || pathInfo.equals("/delete"))) {
                     BufferedReader reader = request.getReader();
                     Gson gson = new Gson();
@@ -152,11 +197,11 @@ public class UserServlet extends HttpServlet {
                     if (pathInfo.equals("/delete") && currentUser.getUser_id().equals(userId)) {
                         response.setContentType("application/json");
                         response.setCharacterEncoding("UTF-8");
-    
+
                         JsonObject errorJson = new JsonObject();
                         errorJson.addProperty("status", "failure");
                         errorJson.addProperty("message", "You cannot delete yourself");
-    
+
                         response.getWriter().write(errorJson.toString());
                         return;
                     }
@@ -240,6 +285,35 @@ public class UserServlet extends HttpServlet {
         } else {
             response.sendRedirect(request.getContextPath() + Constants.LOGIN_URL);
         }
+    }
+
+    private List<String> validateFormData(String username, String firstName, String lastName, String password,
+            String email) {
+        List<String> errorMessages = new ArrayList<>();
+        if (username.isEmpty() || userService.isUsernameExist(username) || firstName.isEmpty() || lastName.isEmpty()
+                || password.isEmpty() || email.isEmpty()
+                || userService.isEmailExist(email)) {
+            if (username.isEmpty()) {
+                errorMessages.add(Constants.USERNAME_REQUIRED);
+            } else if (userService.isUsernameExist(username)) {
+                errorMessages.add(Constants.USERNAME_TAKEN);
+            }
+            if (firstName.isEmpty()) {
+                errorMessages.add(Constants.FIRST_NAME_REQUIRED);
+            }
+            if (lastName.isEmpty()) {
+                errorMessages.add(Constants.LAST_NAME_REQUIRED);
+            }
+            if (password.isEmpty()) {
+                errorMessages.add(Constants.PASSWORD_REQUIRED);
+            }
+            if (email.isEmpty()) {
+                errorMessages.add(Constants.EMAIL_REQUIRED);
+            } else if (userService.isEmailExist(email)) {
+                errorMessages.add(Constants.EMAIL_IN_USE);
+            }
+        }
+        return errorMessages;
     }
 
     private boolean isUserLoggedIn(HttpSession session) {
