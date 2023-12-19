@@ -58,6 +58,7 @@
               name="firstName"
               placeholder="John"
               required
+              autofocus
               autocomplete="given-name"
               aria-label="First Name"
             />

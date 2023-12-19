@@ -258,12 +258,28 @@ const openEditModal = async (user_id) => {
         if (response.currentUserId !== user_id) {
           Swal.fire({
             title: "Are you sure?",
-            html: `You are about to delete the user with the following details:<br><br><b>Full Name:</b> ${response.firstName} ${response.lastName}<br><b>Username:</b> ${response.username}<br><b>Email:</b> ${response.email}<br><br>You won't be able to revert this!`,
+            html: `
+              You are about to delete the user with the following details:<br><br>
+              <b>Full Name:</b> ${response.firstName} ${response.lastName}<br>
+              <b>Username:</b> ${response.username}<br>
+              <b>Email:</b> ${response.email}<br><br>
+              You won't be able to revert this!<br><br>
+              <input id="confirmUsername" class="swal2-input" placeholder="Type username to confirm" style="width: 40%;">
+              `,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!",
+            width: '800px',
+            preConfirm: function () {
+              var confirmUsername = document.getElementById("confirmUsername").value;
+              if (!confirmUsername || confirmUsername !== response.username) {
+                Swal.showValidationMessage("Please type the correct username to confirm deletion");
+                return false;
+              }
+              return true;
+            }
           }).then((result) => {
             if (result.isConfirmed) {
               deleteUser(user_id);

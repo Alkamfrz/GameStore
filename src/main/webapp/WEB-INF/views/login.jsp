@@ -62,6 +62,7 @@
               name="usernameOrEmail"
               placeholder="johndoe"
               required
+              autofocus
               autocomplete="username"
               aria-label="Username"
             />
