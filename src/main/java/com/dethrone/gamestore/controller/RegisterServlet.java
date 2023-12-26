@@ -85,12 +85,12 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String username = Optional.ofNullable(request.getParameter(Constants.USERNAME)).orElse("");
+            String username = Optional.ofNullable(request.getParameter(Constants.USERNAME)).orElse("").toLowerCase();
             String firstName = Optional.ofNullable(request.getParameter(Constants.FIRST_NAME)).orElse("");
             String lastName = Optional.ofNullable(request.getParameter(Constants.LAST_NAME)).orElse("");
             String password = Optional.ofNullable(request.getParameter(Constants.PASSWORD)).orElse("");
             String confirmPassword = Optional.ofNullable(request.getParameter(Constants.CONFIRM_PASSWORD)).orElse("");
-            String email = Optional.ofNullable(request.getParameter(Constants.EMAIL)).orElse("");
+            String email = Optional.ofNullable(request.getParameter(Constants.EMAIL)).orElse("").toLowerCase();
 
             firstName = Arrays.stream(firstName.split(" "))
                     .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())

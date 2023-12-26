@@ -6,11 +6,13 @@ package com.dethrone.gamestore.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.dethrone.gamestore.Constants;
 import com.dethrone.gamestore.model.User;
@@ -136,12 +138,19 @@ public class UserServlet extends HttpServlet {
                     Map<String, Object> data = gson.fromJson(reader, new TypeToken<Map<String, Object>>() {
                     }.getType());
 
-                    String username = (String) data.get(Constants.USERNAME);
+                    String username = ((String) data.get(Constants.USERNAME)).toLowerCase();
                     String firstName = (String) data.get(Constants.FIRST_NAME);
                     String lastName = (String) data.get(Constants.LAST_NAME);
                     String password = (String) data.get(Constants.PASSWORD);
-                    String email = (String) data.get(Constants.EMAIL);
+                    String email = ((String) data.get(Constants.EMAIL)).toLowerCase();
                     String role = (String) data.get(Constants.ROLE);
+
+                    firstName = Arrays.stream(firstName.split(" "))
+                            .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                            .collect(Collectors.joining(" "));
+                    lastName = Arrays.stream(lastName.split(" "))
+                            .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                            .collect(Collectors.joining(" "));
 
                     List<String> errorMessage = validateFormData(username, firstName, lastName, password, email);
 
@@ -209,8 +218,8 @@ public class UserServlet extends HttpServlet {
                         if (pathInfo.equals("/edit")) {
                             String newFirstName = (String) data.get("firstName");
                             String newLastName = (String) data.get("lastName");
-                            String newUsername = (String) data.get("username");
-                            String newEmail = (String) data.get("email");
+                            String newUsername = ((String) data.get("username")).toLowerCase();
+                            String newEmail = ((String) data.get("email")).toLowerCase();
                             String newRole = (String) data.get("role");
 
                             Optional<User> userToEditOpt = userService.getUserById(userId);
