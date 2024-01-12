@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.dethrone.gamestore.controller;
 
 import com.dethrone.gamestore.Constants;
@@ -21,10 +17,6 @@ import java.nio.file.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-/**
- *
- * @author alkam
- */
 @WebServlet(name = "ProfileServlet", urlPatterns = { "/profile/*" })
 @MultipartConfig
 public class ProfileServlet extends HttpServlet {
@@ -37,27 +29,6 @@ public class ProfileServlet extends HttpServlet {
         ServletContext context = getServletContext();
         userService = (UserService) context.getAttribute("userService");
     }
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
-     */
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
-    // + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
-     */
 
     private void writeResponse(HttpServletResponse response, Object object) throws IOException {
         response.setContentType("application/json");
@@ -103,14 +74,6 @@ public class ProfileServlet extends HttpServlet {
                 currentUser.getLastLogin().format(DateTimeFormatter.ofPattern(Constants.DATE_FORMAT)));
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -192,23 +155,26 @@ public class ProfileServlet extends HttpServlet {
 
             Part profilePhotoPart = request.getPart(Constants.PHOTO);
             if (profilePhotoPart != null && profilePhotoPart.getSize() > 0) {
-                String fileName = UUID.randomUUID().toString() + "." +
-                        com.google.common.io.Files.getFileExtension(profilePhotoPart.getSubmittedFileName());
-                try (InputStream fileContent = profilePhotoPart.getInputStream()) {
-                    String userDirectoryPath = getServletContext().getRealPath(Constants.USER_DIRECTORY)
-                            + currentUser.getUser_id().toString().replace("-", "").substring(0, 10)
-                            + Constants.USER_IMAGE_DIRECTORY;
-                    Path userDirectory = Paths.get(userDirectoryPath);
-                    Files.createDirectories(userDirectory);
+                String submittedFileName = profilePhotoPart.getSubmittedFileName();
+                if (submittedFileName != null) {
+                    String fileName = UUID.randomUUID().toString() + "." +
+                            com.google.common.io.Files.getFileExtension(submittedFileName);
+                    try (InputStream fileContent = profilePhotoPart.getInputStream()) {
+                        String userDirectoryPath = getServletContext().getRealPath(Constants.USER_DIRECTORY)
+                                + currentUser.getUser_id().toString().replace("-", "").substring(0, 10)
+                                + Constants.USER_IMAGE_DIRECTORY;
+                        Path userDirectory = Paths.get(userDirectoryPath);
+                        Files.createDirectories(userDirectory);
 
-                    if (currentUser.getProfilePhoto() != null) {
-                        Path oldPhotoPath = userDirectory.resolve(currentUser.getProfilePhoto());
-                        Files.deleteIfExists(oldPhotoPath);
+                        if (currentUser.getProfilePhoto() != null) {
+                            Path oldPhotoPath = userDirectory.resolve(currentUser.getProfilePhoto());
+                            Files.deleteIfExists(oldPhotoPath);
+                        }
+
+                        Files.copy(fileContent, userDirectory.resolve(fileName),
+                                StandardCopyOption.REPLACE_EXISTING);
+                        currentUser.setProfilePhoto(fileName);
                     }
-
-                    Files.copy(fileContent, userDirectory.resolve(fileName),
-                            StandardCopyOption.REPLACE_EXISTING);
-                    currentUser.setProfilePhoto(fileName);
                 }
             } else if (request.getParameter("deletePhoto") != null) {
                 String userDirectoryPath = getServletContext().getRealPath(Constants.USER_DIRECTORY)
@@ -242,11 +208,6 @@ public class ProfileServlet extends HttpServlet {
         return errorMessages;
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "ProfileServlet";

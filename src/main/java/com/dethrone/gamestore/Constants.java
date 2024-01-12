@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.dethrone.gamestore;
 
-/**
- *
- * @author alkam
- */
 public class Constants {
     // Session attributes
     public static final String USER_SESSION_ATTRIBUTE = "user";
@@ -48,6 +40,12 @@ public class Constants {
     public static final String GAME_RELEASE_DATE = "game_release_date";
     public static final String GAME_RATING = "game_rating";
 
+    // Genre attributes
+    public static final String GENRES = "genres";
+    public static final String GENRE_ID = "genre_id";
+    public static final String GENRE_NAME = "genre_name";
+    public static final String GENRE_DESCRIPTION = "genre_description";
+
     // User statistics
     public static final String USERS = "users";
     public static final String TOTAL_USERS = "totalUsers";
@@ -71,6 +69,8 @@ public class Constants {
     public static final String REGISTER_VIEW = "/WEB-INF/views/register.jsp";
     public static final String USERS_VIEW = "/WEB-INF/views/users.jsp";
     public static final String STORE_VIEW = "/WEB-INF/views/store.jsp";
+    public static final String GAMES_VIEW = "/WEB-INF/views/games.jsp";
+    public static final String GENRE_VIEW = "/WEB-INF/views/genre.jsp";
     public static final String USER_DIRECTORY = "/assets/user_profile/";
     public static final String USER_IMAGE_DIRECTORY = "/images/";
 

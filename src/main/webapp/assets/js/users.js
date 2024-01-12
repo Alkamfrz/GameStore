@@ -63,6 +63,11 @@ const deleteUser = async (user_id) => {
     });
   } else {
     console.error("Failed to delete user");
+    sessionStorage.setItem(
+      "userOperation",
+      JSON.stringify({ type: "error", message: response.message })
+    );
+    location.reload();
   }
 };
 
@@ -141,6 +146,11 @@ const openAddUserModal = () => {
         location.reload();
       } else {
         console.error("Failed to add user");
+        sessionStorage.setItem(
+          "userOperation",
+          JSON.stringify({ type: "error", message: response.message })
+        );
+        location.reload();
       }
     }
   });
@@ -252,7 +262,12 @@ const openEditModal = async (user_id) => {
           sessionStorage.setItem("userOperation", "User updated successfully");
           location.reload();
         } else {
-          console.error("Failed to update user");
+          console.error("Failed to edit user");
+          sessionStorage.setItem(
+            "userOperation",
+            JSON.stringify({ type: "error", message: response.message })
+          );
+          location.reload();
         }
       } else if (result.dismiss === "cancel") {
         if (response.currentUserId !== user_id) {
@@ -296,11 +311,11 @@ const openEditModal = async (user_id) => {
 document.addEventListener("DOMContentLoaded", () => {
   setupDropdownAnimation();
 
-  const userOperation = sessionStorage.getItem("userOperation");
+  const userOperation = JSON.parse(sessionStorage.getItem("userOperation"));
   if (userOperation) {
     Swal.fire({
-      icon: "success",
-      title: userOperation,
+      icon: userOperation.type,
+      title: userOperation.message,
       showConfirmButton: true,
       confirmButtonText: "OK",
       timer: 1500,

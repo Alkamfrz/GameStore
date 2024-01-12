@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.dethrone.gamestore.service;
 
 import java.security.SecureRandom;
@@ -12,10 +8,6 @@ import org.bouncycastle.crypto.params.Argon2Parameters;
 
 import com.dethrone.gamestore.model.User;
 
-/**
- *
- * @author alkam
- */
 public class SecurityService {
 
     public String hashPassword(String password, String salt) {

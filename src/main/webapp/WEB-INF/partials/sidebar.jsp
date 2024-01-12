@@ -16,6 +16,18 @@
       </a>
       <a
         class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-indigo-400 hover:to-indigo-300 hover:text-white"
+        href="/GameStore/admin/games"
+      >
+        <i class="fas fa-gamepad mr-2"></i>Games
+      </a>
+      <a
+        class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-indigo-400 hover:to-indigo-300 hover:text-white"
+        href="/GameStore/admin/genres"
+      >
+        <i class="fas fa-tags mr-2"></i>Genres
+      </a>
+      <a
+        class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-indigo-400 hover:to-indigo-300 hover:text-white"
         href="#"
       >
         <i class="fas fa-exchange-alt mr-2"></i>Transactions

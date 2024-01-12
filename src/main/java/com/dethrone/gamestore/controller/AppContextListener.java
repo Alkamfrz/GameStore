@@ -5,6 +5,7 @@ import com.dethrone.gamestore.service.SecurityService;
 import com.dethrone.gamestore.service.UserService;
 import com.dethrone.gamestore.service.TransactionService;
 import com.dethrone.gamestore.service.GameService;
+import com.dethrone.gamestore.service.GenreService;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
@@ -22,6 +23,7 @@ public class AppContextListener implements ServletContextListener {
         UserService userService = new UserService(securityService);
         TransactionService transactionService = new TransactionService();
         GameService gameService = new GameService();
+        GenreService genreService = new GenreService();
 
         userService.nullifyAllProfilePhotos(ctx);
 
@@ -29,6 +31,7 @@ public class AppContextListener implements ServletContextListener {
         ctx.setAttribute("userService", userService);
         ctx.setAttribute("transactionService", transactionService);
         ctx.setAttribute("gameService", gameService);
+        ctx.setAttribute("genreService", genreService);
     }
 
     @Override
