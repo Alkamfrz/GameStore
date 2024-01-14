@@ -32,7 +32,7 @@ public class LogoutServlet extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "LogoutServlet";
+        return "Logout Servlet";
     }
 
 }

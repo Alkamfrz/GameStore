@@ -311,6 +311,6 @@ public class UserServlet extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "UserServlet";
+        return "User Servlet";
     }
 }

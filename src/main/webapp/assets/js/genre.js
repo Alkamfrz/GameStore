@@ -47,7 +47,7 @@ const makeAjaxRequest = async (type, url, data) => {
 const deleteGenre = async (genre_id) => {
   const response = await makeAjaxRequest(
     "POST",
-    `/GameStore/admin/genres/delete`,
+    `/GameStore/admin/genre/delete`,
     { genre_id: genre_id }
   );
   if (response.status === "success") {
@@ -71,9 +71,9 @@ const openAddGenreModal = () => {
         <div>
             <label for="name" class="swal2-label">Genre Name</label>
             <input id="name" class="swal2-input" placeholder="Genre Name">
-            <label for="description" class="swal2-label">Genre Description</label>
-            <div id="description" class="swal2-input" contenteditable="true" style="min-height: 100px; border: 1px solid #ccc; padding: 10px;"></div>
-        </div>
+            <label for="description" class="swal2-label">Publisher Description</label>
+    <textarea id="description" class="swal2-input" placeholder="Publisher Description" style="min-height: 100px; width: 100%; border: 1px solid #ccc; padding: 10px; overflow: auto; resize: none;"></textarea>
+  </div>
     `;
 
   Swal.fire({
@@ -83,7 +83,7 @@ const openAddGenreModal = () => {
     showCancelButton: true,
     preConfirm: function () {
       var name = document.getElementById("name").value;
-      var description = document.getElementById("description").innerText;
+      var description = document.getElementById("description").value;
 
       if (!name) {
         Swal.showValidationMessage("Genre name is required");
@@ -99,7 +99,7 @@ const openAddGenreModal = () => {
     if (result.isConfirmed) {
       const response = await makeAjaxRequest(
         "POST",
-        "/GameStore/admin/genres/add",
+        "/GameStore/admin/genre/add",
         result.value
       );
       if (response.status === "success") {
@@ -127,7 +127,7 @@ const openEditGenreModal = async (genre_id) => {
   try {
     const response = await makeAjaxRequest(
       "GET",
-      `/GameStore/admin/genres/${genre_id}`
+      `/GameStore/admin/genre/${genre_id}`
     );
 
     const originalFormData = {
@@ -141,10 +141,8 @@ const openEditGenreModal = async (genre_id) => {
         <input id="name" class="swal2-input" value="${
           response.name
         }" placeholder="Genre Name">
-        <label for="description" class="swal2-label">Genre Description</label>
-        <div id="description" class="swal2-input" contenteditable="true" style="min-height: 100px; border: 1px solid #ccc; padding: 10px;">${
-          response.description ? response.description : ""
-        }</div>
+        <label for="description" class="swal2-label">Publisher Description</label>
+        <textarea id="description" class="swal2-input" placeholder="Publisher Description" style="min-height: 100px; width: 100%; border: 1px solid #ccc; padding: 10px; overflow: auto; resize: none;">${response.description}</textarea>
       </div>
     `;
 
@@ -156,7 +154,7 @@ const openEditGenreModal = async (genre_id) => {
       cancelButtonText: "Delete",
       preConfirm: function () {
         var name = document.getElementById("name").value;
-        var description = document.getElementById("description").innerText;
+        var description = document.getElementById("description").value;
 
         if (!name) {
           Swal.showValidationMessage("Genre name is required");
@@ -184,7 +182,7 @@ const openEditGenreModal = async (genre_id) => {
       if (result.isConfirmed) {
         const response = await makeAjaxRequest(
           "POST",
-          "/GameStore/admin/genres/edit",
+          "/GameStore/admin/genre/edit",
           result.value
         );
         if (response.status === "success") {

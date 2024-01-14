@@ -2,8 +2,6 @@ package com.dethrone.gamestore.service;
 
 import com.dethrone.gamestore.HibernateUtil;
 import com.dethrone.gamestore.model.Game;
-import com.dethrone.gamestore.model.Genre;
-import com.dethrone.gamestore.model.Publisher;
 
 import org.hibernate.Session;
 
@@ -16,9 +14,8 @@ import java.util.UUID;
 public class GameService {
 
     private static final String QUERY_BY_GAME_ID = "from Game where game_id = :value";
-    private static final String QUERY_BY_GENRE_ID = "from Genre where genre_id = :value";
-    private static final String QUERY_BY_PUBLISHER_ID = "from Publisher where publisher_id = :value";
     private static final String QUERY_ALL_GAMES = "from Game";
+    private static final String QUERY_BY_GAME_NAME = "from Game where game_name = :value";
 
     private void executeInTransaction(Consumer<Session> action) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -56,26 +53,14 @@ public class GameService {
         });
     }
 
-    public Optional<Genre> getGenreById(UUID genre_id) {
+    public Optional<Game> getGameByName(String game_name) {
         return executeQuery(session -> {
-            List<Genre> genres = session.createQuery(QUERY_BY_GENRE_ID, Genre.class)
-                    .setParameter("value", genre_id).getResultList();
-            if (genres.isEmpty()) {
+            List<Game> games = session.createQuery(QUERY_BY_GAME_NAME, Game.class)
+                    .setParameter("value", game_name).getResultList();
+            if (games.isEmpty()) {
                 return Optional.empty();
             } else {
-                return Optional.ofNullable(genres.get(0));
-            }
-        });
-    }
-
-    public Optional<Publisher> getPublisherById(UUID publisher_id) {
-        return executeQuery(session -> {
-            List<Publisher> publishers = session.createQuery(QUERY_BY_PUBLISHER_ID, Publisher.class)
-                    .setParameter("value", publisher_id).getResultList();
-            if (publishers.isEmpty()) {
-                return Optional.empty();
-            } else {
-                return Optional.ofNullable(publishers.get(0));
+                return Optional.ofNullable(games.get(0));
             }
         });
     }

@@ -210,7 +210,7 @@ public class ProfileServlet extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "ProfileServlet";
+        return "Profile Servlet";
     }
 
 }

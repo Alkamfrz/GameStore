@@ -15,8 +15,8 @@ import java.util.*;
 @Table(name = "genre")
 public class Genre implements Serializable {
 
-    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Game> games;
+    @ManyToMany(mappedBy = "genres")
+    private Set<Game> games;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -28,8 +28,8 @@ public class Genre implements Serializable {
     @Column(name = "genre_name")
     private String genre_name;
 
+    @Lob
     @Null
-    @Size(min = 2, max = 50)
-    @Column(name = "genre_description")
+    @Column(name = "genre_description", columnDefinition = "LONGTEXT")
     private String genre_description;
 }

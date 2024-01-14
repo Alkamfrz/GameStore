@@ -16,15 +16,21 @@
       </a>
       <a
         class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-indigo-400 hover:to-indigo-300 hover:text-white"
-        href="/GameStore/admin/games"
+        href="/GameStore/admin/game"
       >
         <i class="fas fa-gamepad mr-2"></i>Games
       </a>
       <a
         class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-indigo-400 hover:to-indigo-300 hover:text-white"
-        href="/GameStore/admin/genres"
+        href="/GameStore/admin/genre"
       >
-        <i class="fas fa-tags mr-2"></i>Genres
+        <i class="fas fa-tags mr-2"></i>Genre
+      </a>
+      <a
+        class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-indigo-400 hover:to-indigo-300 hover:text-white"
+        href="/GameStore/admin/publisher"
+      >
+        <i class="fas fa-building mr-2"></i>Publisher
       </a>
       <a
         class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-indigo-400 hover:to-indigo-300 hover:text-white"

@@ -35,17 +35,6 @@ public class RegisterServlet extends HttpServlet {
         userService = (UserService) context.getAttribute("userService");
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -122,7 +111,7 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "RegisterServlet";
+        return "Register Servlet";
     }
 
 }

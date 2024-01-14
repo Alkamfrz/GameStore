@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.io.Serializable;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -27,21 +27,33 @@ public class Game implements Serializable {
     private String game_name;
 
     @NonNull
-    @Column(name = "price")
-    private Integer price;
+    @Column(name = "game_release_date")
+    private Date game_release_date;
 
     @NonNull
-    @Size(min = 2, max = 500)
-    @Column(name = "description")
-    private String description;
+    @Column(name = "game_rating")
+    private Double game_rating;
 
     @NonNull
-    @Column(name = "image")
-    private String image;
+    @Column(name = "game_price")
+    private Double game_price;
 
-    @ManyToOne
-    @JoinColumn(name = "genre_id", nullable = false)
-    private Genre genre;
+    @Lob
+    @Null
+    @Column(name = "game_description", columnDefinition = "LONGTEXT")
+    private String game_description;
+
+    @NonNull
+    @Column(name = "game_image")
+    private String game_image;
+
+    @ManyToMany
+    @JoinTable(
+        name = "game_genre", 
+        joinColumns = @JoinColumn(name = "game_id"), 
+        inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private Set<Genre> genres;
 
     @ManyToOne
     @JoinColumn(name = "publisher_id", nullable = false)

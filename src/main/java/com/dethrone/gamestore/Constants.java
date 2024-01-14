@@ -25,12 +25,13 @@ public class Constants {
 
     // Transaction attributes
     public static final String TRANSACTION_ID = "transaction_id";
-    public static final String GAME_ID = "game_id";
     public static final String TRANSACTION_DATE = "transaction_date";
     public static final String TRANSACTION_AMOUNT = "transaction_amount";
     public static final String TRANSACTION_STATUS = "transaction_status";
 
     // Game attributes
+    public static final String GAMES = "games";
+    public static final String GAME_ID = "game_id";
     public static final String GAME_NAME = "game_name";
     public static final String GAME_PRICE = "game_price";
     public static final String GAME_DESCRIPTION = "game_description";
@@ -39,12 +40,23 @@ public class Constants {
     public static final String GAME_GENRE = "game_genre";
     public static final String GAME_RELEASE_DATE = "game_release_date";
     public static final String GAME_RATING = "game_rating";
-
+    
     // Genre attributes
     public static final String GENRES = "genres";
     public static final String GENRE_ID = "genre_id";
     public static final String GENRE_NAME = "genre_name";
     public static final String GENRE_DESCRIPTION = "genre_description";
+
+    // Publisher attributes
+    public static final String PUBLISHERS = "publishers";
+    public static final String PUBLISHER_ID = "publisher_id";
+    public static final String PUBLISHER_NAME = "publisher_name";
+    public static final String PUBLISHER_COUNTRY = "publisher_country";
+    public static final String PUBLISHER_CITY = "publisher_city";
+    public static final String PUBLISHER_STREET = "publisher_street";
+    public static final String PUBLISHER_PHONE = "publisher_phone";
+    public static final String PUBLISHER_EMAIL = "publisher_email";
+    public static final String PUBLISHER_WEBSITE = "publisher_website";
 
     // User statistics
     public static final String USERS = "users";
@@ -69,13 +81,16 @@ public class Constants {
     public static final String REGISTER_VIEW = "/WEB-INF/views/register.jsp";
     public static final String USERS_VIEW = "/WEB-INF/views/users.jsp";
     public static final String STORE_VIEW = "/WEB-INF/views/store.jsp";
-    public static final String GAMES_VIEW = "/WEB-INF/views/games.jsp";
+    public static final String GAME_VIEW = "/WEB-INF/views/game.jsp";
     public static final String GENRE_VIEW = "/WEB-INF/views/genre.jsp";
+    public static final String PUBLISHER_VIEW = "/WEB-INF/views/publisher.jsp";
     public static final String USER_DIRECTORY = "/assets/user_profile/";
     public static final String USER_IMAGE_DIRECTORY = "/images/";
 
     // Error messages
     public static final String ERROR_MESSAGE = "errorMessage";
+    public static final String DATE_PARSE_ERROR = "Error parsing date";
+    public static final String GET_REQUEST_ERROR = "Error processing GET request";
     public static final String POST_REQUEST_ERROR = "Error processing POST request";
     public static final String DATABASE_ERROR = "Database error";
     public static final String INVALID_CREDENTIALS = "Invalid username or password";

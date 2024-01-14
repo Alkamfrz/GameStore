@@ -93,6 +93,6 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "LoginServlet";
+        return "Login Servlet";
     }
 }
