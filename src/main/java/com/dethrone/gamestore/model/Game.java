@@ -47,13 +47,13 @@ public class Game implements Serializable {
     @Column(name = "game_image")
     private String game_image;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
         name = "game_genre", 
         joinColumns = @JoinColumn(name = "game_id"), 
         inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
-    private Set<Genre> genres;
+    Set<Genre> genres;
 
     @ManyToOne
     @JoinColumn(name = "publisher_id", nullable = false)

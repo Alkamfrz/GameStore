@@ -16,7 +16,7 @@ import java.util.*;
 public class Genre implements Serializable {
 
     @ManyToMany(mappedBy = "genres")
-    private Set<Game> games;
+    Set<Game> games;
 
     private static final long serialVersionUID = 1L;
     @Id

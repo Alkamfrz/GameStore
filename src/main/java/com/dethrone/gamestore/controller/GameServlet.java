@@ -154,16 +154,22 @@ public class GameServlet extends HttpServlet {
                     }
 
                     Optional<Publisher> publisher = publisherService.getPublisherById(publisherId);
-                    System.out.println(publisherId);
                     List<Genre> genres = new ArrayList<>();
                     for (UUID genreId : genreIds) {
                         Optional<Genre> genreOpt = genreService.getGenreById(genreId);
                         if (genreOpt.isPresent()) {
                             Genre genre = genreOpt.get();
-                            if (genre.getGenre_id() == null) {
-                                genreService.createGenre(genre);
-                            }
                             genres.add(genre);
+                        } else {
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
+
+                            JsonObject errorJson = new JsonObject();
+                            errorJson.addProperty("status", "failure");
+                            errorJson.addProperty("message", "Genre not found");
+
+                            response.getWriter().write(errorJson.toString());
+                            return;
                         }
                     }
 
@@ -189,7 +195,7 @@ public class GameServlet extends HttpServlet {
                     newGame.setPublisher(publisher.orElse(null));
                     newGame.setGenres(new HashSet<>(genres));
 
-                    gameService.createGame(newGame);
+                    gameService.createGame(newGame, genreIds);
 
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
