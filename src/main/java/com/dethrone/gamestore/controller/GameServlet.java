@@ -2,9 +2,11 @@ package com.dethrone.gamestore.controller;
 
 import com.dethrone.gamestore.Constants;
 import com.dethrone.gamestore.model.Game;
+import com.dethrone.gamestore.model.Genre;
 import com.dethrone.gamestore.model.Publisher;
 import com.dethrone.gamestore.model.User;
 import com.dethrone.gamestore.service.GameService;
+import com.dethrone.gamestore.service.GenreService;
 import com.dethrone.gamestore.service.PublisherService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -23,6 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,6 +42,7 @@ public class GameServlet extends HttpServlet {
 
     private GameService gameService;
     private PublisherService publisherService;
+    private GenreService genreService;
 
     @Override
     public void init() throws ServletException {
@@ -45,6 +50,7 @@ public class GameServlet extends HttpServlet {
         ServletContext context = getServletContext();
         gameService = (GameService) context.getAttribute("gameService");
         publisherService = (PublisherService) context.getAttribute("publisherService");
+        genreService = (GenreService) context.getAttribute("genreService");
     }
 
     @Override
@@ -109,12 +115,57 @@ public class GameServlet extends HttpServlet {
 
                 if (pathInfo != null && pathInfo.equals("/add")) {
                     String gameName = (String) data.get("name");
-                    Date gameReleaseDate = new Date((Long) data.get("release_date"));
-                    Double gameRating = (Double) data.get("rating");
-                    Double gamePrice = (Double) data.get("price");
+                    Object releaseDateObj = data.get("release_date");
+                    Long releaseDateLong;
+                    if (releaseDateObj instanceof Double) {
+                        releaseDateLong = ((Double) releaseDateObj).longValue();
+                    } else {
+                        releaseDateLong = (Long) releaseDateObj;
+                    }
+                    Date gameReleaseDate = new Date(releaseDateLong);
+                    Double gameRating = Double.parseDouble((String) data.get("rating"));
+                    Double gamePrice = Double.parseDouble((String) data.get("price"));
                     String gameDescription = (String) data.get("description");
                     String gameImage = (String) data.get("image");
-                    UUID publisherId = UUID.fromString((String) data.get("publisher_id"));
+                    UUID publisherId = null;
+                    if (data.get("publisher") != null) {
+                        Object publisherIdObj = data.get("publisher");
+                        if (publisherIdObj instanceof UUID) {
+                            publisherId = (UUID) publisherIdObj;
+                        } else if (publisherIdObj instanceof String) {
+                            publisherId = UUID.fromString((String) publisherIdObj);
+                        }
+                    }
+                    Object genresObj = data.get("genres");
+                    List<UUID> genreIds = new ArrayList<>();
+
+                    if (genresObj instanceof List<?>) {
+                        for (Object o : (List<?>) genresObj) {
+                            if (o instanceof String) {
+                                genreIds.add(UUID.fromString((String) o));
+                            } else if (o instanceof List<?>) {
+                                for (Object innerObj : (List<?>) o) {
+                                    if (innerObj instanceof String) {
+                                        genreIds.add(UUID.fromString((String) innerObj));
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Optional<Publisher> publisher = publisherService.getPublisherById(publisherId);
+                    System.out.println(publisherId);
+                    List<Genre> genres = new ArrayList<>();
+                    for (UUID genreId : genreIds) {
+                        Optional<Genre> genreOpt = genreService.getGenreById(genreId);
+                        if (genreOpt.isPresent()) {
+                            Genre genre = genreOpt.get();
+                            if (genre.getGenre_id() == null) {
+                                genreService.createGenre(genre);
+                            }
+                            genres.add(genre);
+                        }
+                    }
 
                     if (gameService.getGameByName(gameName).isPresent()) {
                         response.setContentType("application/json");
@@ -135,7 +186,8 @@ public class GameServlet extends HttpServlet {
                     newGame.setGame_price(gamePrice);
                     newGame.setGame_description(gameDescription);
                     newGame.setGame_image(gameImage);
-                    newGame.setPublisher(publisherService.getPublisherById(publisherId).orElse(null));
+                    newGame.setPublisher(publisher.orElse(null));
+                    newGame.setGenres(new HashSet<>(genres));
 
                     gameService.createGame(newGame);
 

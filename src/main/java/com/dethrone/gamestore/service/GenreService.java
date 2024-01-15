@@ -4,6 +4,7 @@ import com.dethrone.gamestore.HibernateUtil;
 import com.dethrone.gamestore.model.Genre;
 
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +54,14 @@ public class GenreService {
         });
     }
 
+    public List<Genre> getGenresByIds(List<UUID> genreIds) {
+        return executeQuery(session -> {
+            Query<Genre> query = session.createQuery("from Genre where genre_id in (:ids)", Genre.class);
+            query.setParameterList("ids", genreIds);
+            return query.getResultList();
+        });
+    }
+    
     public Optional<Genre> getGenreByName(String genre_name) {
         return executeQuery(session -> {
             List<Genre> genres = session.createQuery(QUERY_BY_GENRE_NAME, Genre.class)
