@@ -16,11 +16,12 @@ import java.util.*;
 public class Genre implements Serializable {
 
     @ManyToMany(mappedBy = "genres")
-    Set<Game> games;
+    private Set<Game> games;
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "genre_id")
     private UUID genre_id;
 
     @NonNull
