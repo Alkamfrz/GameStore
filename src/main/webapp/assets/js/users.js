@@ -51,7 +51,10 @@ const deleteUser = async (user_id) => {
     { user_id: user_id }
   );
   if (response.status === "success") {
-    sessionStorage.setItem("userOperation", "User deleted successfully");
+    sessionStorage.setItem(
+      "userOperation",
+      JSON.stringify({ type: "success", message: "User deleted successfully" })
+    );
     location.reload();
   } else if (
     response.status === "failure" &&
@@ -120,7 +123,14 @@ const openAddUserModal = () => {
       var email = document.getElementById("email").value;
       var role = document.getElementById("role").value;
 
-      if (!firstName || !lastName || !username || !password || !email || !role) {
+      if (
+        !firstName ||
+        !lastName ||
+        !username ||
+        !password ||
+        !email ||
+        !role
+      ) {
         Swal.showValidationMessage("All fields are required");
         return false;
       }
@@ -142,7 +152,13 @@ const openAddUserModal = () => {
         result.value
       );
       if (response.status === "success") {
-        sessionStorage.setItem("userOperation", "User added successfully");
+        sessionStorage.setItem(
+          "userOperation",
+          JSON.stringify({
+            type: "success",
+            message: "User added successfully",
+          })
+        );
         location.reload();
       } else {
         console.error("Failed to add user");
@@ -259,7 +275,13 @@ const openEditModal = async (user_id) => {
           result.value
         );
         if (response.status === "success") {
-          sessionStorage.setItem("userOperation", "User updated successfully");
+          sessionStorage.setItem(
+            "userOperation",
+            JSON.stringify({
+              type: "success",
+              message: "User edited successfully",
+            })
+          );
           location.reload();
         } else {
           console.error("Failed to edit user");
@@ -286,15 +308,18 @@ const openEditModal = async (user_id) => {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!",
-            width: '800px',
+            width: "800px",
             preConfirm: function () {
-              var confirmUsername = document.getElementById("confirmUsername").value;
+              var confirmUsername =
+                document.getElementById("confirmUsername").value;
               if (!confirmUsername || confirmUsername !== response.username) {
-                Swal.showValidationMessage("Please type the correct username to confirm deletion");
+                Swal.showValidationMessage(
+                  "Please type the correct username to confirm deletion"
+                );
                 return false;
               }
               return true;
-            }
+            },
           }).then((result) => {
             if (result.isConfirmed) {
               deleteUser(user_id);
@@ -322,20 +347,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     sessionStorage.removeItem("userOperation");
   }
-  $(document).ready(function() {
-    var table = $('#userTable').DataTable({
-      "pagingType": "full_numbers",
-      "order": [[ 1, "desc" ]],
-      "language": {
-        "emptyTable": "No users found"
+  $(document).ready(function () {
+    var table = $("#userTable").DataTable({
+      pagingType: "full_numbers",
+      order: [[1, "desc"]],
+      language: {
+        emptyTable: "No users found",
       },
-      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-      "columnDefs": [
-        { "orderable": false, "targets": [4, 5] }
-      ]
+      lengthMenu: [
+        [10, 25, 50, -1],
+        [10, 25, 50, "All"],
+      ],
+      columnDefs: [{ orderable: false, targets: [4, 5] }],
     });
 
-    $('#searchInput').on('keyup', function() {
+    $("#searchInput").on("keyup", function () {
       table.search(this.value).draw();
     });
   });
