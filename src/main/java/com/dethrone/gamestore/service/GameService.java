@@ -2,12 +2,8 @@ package com.dethrone.gamestore.service;
 
 import com.dethrone.gamestore.HibernateUtil;
 import com.dethrone.gamestore.model.Game;
-import com.dethrone.gamestore.model.Genre;
-
 import org.hibernate.Session;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -39,20 +35,8 @@ public class GameService {
         }
     }
 
-    public Game createGame(Game game, List<UUID> genreIds) {
-        executeInTransaction(session -> {
-            List<Genre> genres = new ArrayList<>();
-            for (UUID genreId : genreIds) {
-                Genre genre = session.get(Genre.class, genreId);
-                if (genre != null) {
-                    genres.add(genre);
-                } else {
-                    throw new RuntimeException("Genre not found");
-                }
-            }
-            game.setGenres(new HashSet<>(genres));
-            session.persist(game);
-        });
+    public Game createGame(Game game) {
+        executeInTransaction(session -> session.persist(game));
         return game;
     }
 

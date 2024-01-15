@@ -35,5 +35,9 @@
 
         <!-- Mapping files -->
         <mapping class="com.dethrone.gamestore.model.User" />
+        <mapping class="com.dethrone.gamestore.model.Game" />
+        <mapping class="com.dethrone.gamestore.model.Publisher" />
+        <mapping class="com.dethrone.gamestore.model.Genre" />
+        <mapping class="com.dethrone.gamestore.model.Transaction" />
     </session-factory>
 </hibernate-configuration>

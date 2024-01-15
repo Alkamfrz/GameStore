@@ -25,11 +25,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -115,63 +114,13 @@ public class GameServlet extends HttpServlet {
 
                 if (pathInfo != null && pathInfo.equals("/add")) {
                     String gameName = (String) data.get("name");
-                    Object releaseDateObj = data.get("release_date");
-                    Long releaseDateLong;
-                    if (releaseDateObj instanceof Double) {
-                        releaseDateLong = ((Double) releaseDateObj).longValue();
-                    } else {
-                        releaseDateLong = (Long) releaseDateObj;
-                    }
-                    Date gameReleaseDate = new Date(releaseDateLong);
+                    Date gameReleaseDate = new Date(((Number) data.get("release_date")).longValue());
                     Double gameRating = Double.parseDouble((String) data.get("rating"));
                     Double gamePrice = Double.parseDouble((String) data.get("price"));
                     String gameDescription = (String) data.get("description");
                     String gameImage = (String) data.get("image");
-                    UUID publisherId = null;
-                    if (data.get("publisher") != null) {
-                        Object publisherIdObj = data.get("publisher");
-                        if (publisherIdObj instanceof UUID) {
-                            publisherId = (UUID) publisherIdObj;
-                        } else if (publisherIdObj instanceof String) {
-                            publisherId = UUID.fromString((String) publisherIdObj);
-                        }
-                    }
-                    Object genresObj = data.get("genres");
-                    List<UUID> genreIds = new ArrayList<>();
-
-                    if (genresObj instanceof List<?>) {
-                        for (Object o : (List<?>) genresObj) {
-                            if (o instanceof String) {
-                                genreIds.add(UUID.fromString((String) o));
-                            } else if (o instanceof List<?>) {
-                                for (Object innerObj : (List<?>) o) {
-                                    if (innerObj instanceof String) {
-                                        genreIds.add(UUID.fromString((String) innerObj));
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    Optional<Publisher> publisher = publisherService.getPublisherById(publisherId);
-                    List<Genre> genres = new ArrayList<>();
-                    for (UUID genreId : genreIds) {
-                        Optional<Genre> genreOpt = genreService.getGenreById(genreId);
-                        if (genreOpt.isPresent()) {
-                            Genre genre = genreOpt.get();
-                            genres.add(genre);
-                        } else {
-                            response.setContentType("application/json");
-                            response.setCharacterEncoding("UTF-8");
-
-                            JsonObject errorJson = new JsonObject();
-                            errorJson.addProperty("status", "failure");
-                            errorJson.addProperty("message", "Genre not found");
-
-                            response.getWriter().write(errorJson.toString());
-                            return;
-                        }
-                    }
+                    String publisherId = (String) data.get("publisher");
+                    List<String> genreIds = (List<String>) data.get("genres");
 
                     if (gameService.getGameByName(gameName).isPresent()) {
                         response.setContentType("application/json");
@@ -192,10 +141,18 @@ public class GameServlet extends HttpServlet {
                     newGame.setGame_price(gamePrice);
                     newGame.setGame_description(gameDescription);
                     newGame.setGame_image(gameImage);
-                    newGame.setPublisher(publisher.orElse(null));
-                    newGame.setGenres(new HashSet<>(genres));
 
-                    gameService.createGame(newGame, genreIds);
+                    Publisher publisher = publisherService.getPublisherById(UUID.fromString(publisherId)).orElse(null);
+                    Set<Genre> genres = genreIds.stream()
+                            .map(genreId -> genreService.getGenreById(UUID.fromString(genreId)).orElse(null))
+                            .collect(Collectors.toSet());
+                    
+                    System.out.println(genres);
+
+                    newGame.setPublisher(publisher);
+                    newGame.setGenres(genres);
+
+                    gameService.createGame(newGame);
 
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
